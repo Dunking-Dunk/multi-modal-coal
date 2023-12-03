@@ -48,7 +48,7 @@ export default function Login() {
             } else {
                 toast({
                     title: "error",
-                    description: "Password or Email is wrong.Please try again.",
+                    description: "Password or Email is wrong. Please try again.",
                     variant: 'destructive'
                 })
             }
