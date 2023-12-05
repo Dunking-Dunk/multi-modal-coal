@@ -10,6 +10,9 @@ import { Server } from 'socket.io'
 import {connection} from './socket.js'
 
 import UserRouter from './routes/User.js'
+import VehicleRouter from './routes/Vehicle.js'
+import PlaceRouter from './routes/Place.js'
+
 import ErrorHandler from './middleware/ErrorHandler.js'
 
 const app = express()
@@ -42,6 +45,8 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/users', UserRouter)
+app.use('/api/vehicles', VehicleRouter)
+app.use('/api/places', PlaceRouter)
 
 app.get('/', (req, res) => {
     res.send('hello')

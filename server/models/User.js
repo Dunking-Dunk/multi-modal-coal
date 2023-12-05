@@ -27,10 +27,6 @@ const userSchema = mongoose.Schema({
           enum: ['admin', 'supervisor','driver'],
         default: "admin",
       },
-      createdAt: {
-        type: Date,
-        default: Date.now,
-    },
       age:  {
         type: Number,
         required: [true, "Please Enter Your Age"],
@@ -39,6 +35,10 @@ const userSchema = mongoose.Schema({
         type: Number,
         required: [true, "Please Enter Your Contact"],
     },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
 })
 
 userSchema.pre("save", async function (next) {

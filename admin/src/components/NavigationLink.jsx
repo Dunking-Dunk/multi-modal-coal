@@ -7,7 +7,7 @@ const NavigationLink = ({ children, href, className }) => {
     const isActive = pathname === href
 
     return (
-        <Link to={href} className={`${className} text-sm font-medium transition-colors hover:text-primary ${isActive ? 'text-[#F94C10]' : 'text-primary'}`}>
+        <Link to={href} className={`${className} text-md font-medium transition-colors hover:text-primary ${isActive ? 'text-[#F94C10]' : 'text-primary'}`}>
             {children}
         </Link>
     )

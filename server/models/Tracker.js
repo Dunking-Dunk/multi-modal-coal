@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-
 const trackerSchema = mongoose.Schema({
     speed: {
         type: Number,
@@ -18,14 +17,17 @@ const trackerSchema = mongoose.Schema({
         },
     },
     //all tcu data comes here
-    gpsId: {
+    trackerId: {
         type: String,
         required: true,
         unique: true
-    }//gpsId is registered on the tcu soo it should be consitent
-    
+    },//trackerId is registered on the tcu soo it should be consistent
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
 })
 
 const Tracker = mongoose.model('Tracker', trackerSchema)
 
-export default Vehicle
+export default Tracker

@@ -59,5 +59,55 @@ router.get("/me", authenticatedUser, async (req, res) => {
     user,
   });
 });
+
+router.get('/', authenticatedUser, async (req, res) => { 
+  const users = await User.find({})
+
+  res.status(200).json({
+    success: true,
+    users
+  })
+})
+
+router.put('/:id', authenticatedUser, async (req, res) => { 
+  const {id} = req.params;
+  const user = await User.findByIdAndUpdate(id,{...req.body})
+
+  res.status(201).json({
+    success: true,
+    user
+  })
+})
+
+router.delete('/:id', authenticatedUser, async (req, res) => { 
+  const { id } = req.params;
+  
+  await User.findByIdAndDelete(id)
+
+  res.status(201).json({
+    success: true,
+    id
+  })
+})
+
+router.post('/create', authenticatedUser, async (req, res) => { 
+  const { name, password, email, role,age,contact } = req.body;
+  
+  const user = await User.create({
+    name,
+    password,
+    email,
+    age,
+    role,
+    contact
+  })
+
+  res.status(201).json({
+    success: true,
+    user
+  })
+})
+
+
   
 export default router

@@ -1,43 +1,56 @@
 import mongoose from 'mongoose';
 
-const vehicleSchema = mongoose.Schema({
-    bus: {
+const vehicleSchema = mongoose.Schema({ 
+    make: {
         type: String,
-        required: true,
+        required: [true, 'Vehicle Make Required'],
     },
-    houseOrigin: {
+    model: {
+            type: String,
+            required: [true, 'Vehicle Model Required'],
+    },
+    registerNumber: {
         type: String,
+        required: [true, 'Vehicle Registeration Number Required'],
+        unique: true
     },
     capacity: {
         type: Number,
+        required: [true, 'Vehicle Capacity Required']
     },
-    mode: {
+    type: {
         type: String,
-        enum: ['truck', 'train', 'ship']
+        enum: ['truck', 'wagon', 'ship'],
+        required: [true, 'Vehicle Mode Number Required'],
     },
     status: {
-        type: Boolean
-    },
-    shippingStatus: {
         type: Boolean
     },
     shipping: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Shipping'
     },
-    tracker: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tracker'
+    shippingStatus: {
+        type: Boolean
+    },
+    //this is the id that is present in respective vehicle tcu
+    trackerId: {
+        type: String,
+        required: true,
+        unique: true
     },
     driver: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    gpsId: {
-        type: String,
-        required: true,
-        unique: true
-    }
+    housingOrigin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Place'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
 })
 
 const Vehicle = mongoose.model('Vehicle', vehicleSchema)
