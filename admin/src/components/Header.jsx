@@ -23,9 +23,11 @@ import { logout } from '../store/reducer/UserReducer'
 
 export default function Header({ props }) {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const onLogout = () => {
         dispatch(logout())
+        navigate('/login')
     }
 
     return (
@@ -36,7 +38,8 @@ export default function Header({ props }) {
                     {...props}
                 >
                     <NavigationLink href="/">Dashboard</NavigationLink>
-                    <NavigationLink href="/bus">Transport</NavigationLink>
+                    <NavigationLink href="/vehicle">Vehicle</NavigationLink>
+                    <NavigationLink href="/user">User</NavigationLink>
                     {/* <NavigationLink href='/stop'>Stops</NavigationLink>
                     <NavigationLink href='/driver'>Drivers</NavigationLink>
                     <NavigationLink href='/announcement'>Announcement</NavigationLink>

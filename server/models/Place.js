@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 
-const coalSchema = mongoose.Schema({
+const placeSchema = mongoose.Schema({
     name: {
         type: String,
         required: [true, "Please enter your name"],
@@ -14,9 +14,10 @@ const coalSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter Coal Quantity"],
     },
-    vehicleHousing: {
-        type: [mongoose.Schema.Types.ObjectId],
-    },
+    vehicleHousing: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vehicle'
+    }],
     type: {
         type: String,
         enum: ['mines', 'inventory', 'railyard', 'port'],
@@ -33,8 +34,16 @@ const coalSchema = mongoose.Schema({
             required: true
         },
     },
+    address: {
+        type: String,
+        required: [true, "Please enter the address"],
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    }
 })
 
-const Tracker = mongoose.model('Tracker', trackerSchema)
+const Place = mongoose.model('Place', placeSchema)
 
-export default Vehicle
+export default Place
