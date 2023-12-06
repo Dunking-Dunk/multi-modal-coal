@@ -113,3 +113,68 @@ export const userColumn = [
         }
 
     }]
+
+    import { deletePlace } from "../store/reducer/PlaceReducer";
+
+    export const PlaceColumn = [
+      {
+        accessorKey: "_id",
+        header: "Id",
+      },
+      {
+        accessorKey: "name",
+        header: "Place Name",
+      },
+      {
+        accessorKey: "coalType",
+        header: "Coal Type",
+      },
+      {
+        accessorKey: "quantity",
+        header: "Coal Quantity",
+      },
+      {
+        accessorKey: "type",
+        header: "Place Type",
+      },
+      {
+        accessorKey: "location",
+        header: "Location",
+      },
+      {
+        accessorKey: "address",
+        header: "Address",
+      },
+      {
+        accessorKey: "action",
+        header: "Action",
+        cell: ({ row }) => {
+          const id = row.getValue("_id");
+    
+          return (
+            <div className="flex space-x-4 items-center">
+              <Link
+                to={`/place/${id}`}
+                className="bg-secondary  h-full py-2 px-4 rounded-lg"
+              >
+                View
+              </Link>
+              <Link
+                to={`/place/update/${id}`}
+                className="bg-secondary  h-full py-2 px-4 rounded-lg"
+              >
+                Update
+              </Link>
+              <AlertDialog
+                content="The following will be permanently deleted"
+                onClick={() => {
+                  store.dispatch(deletePlace(id));
+                }}
+              >
+                Delete
+              </AlertDialog>
+            </div>
+          );
+        },
+      },
+    ];
