@@ -12,7 +12,6 @@ const MapView = (props) => {
 
 
     function handleLoad(map) {
-
         mapRef.current = map;
     }
 

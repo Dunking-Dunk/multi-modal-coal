@@ -38,6 +38,30 @@ export const createVehicle = createAsyncThunk('vehicle/createVehicle', async (bo
     }
 })
 
+export const updateVehicle = createAsyncThunk('vehicle/updateVehicle', async ({id,body}, thunkAPI) => {
+    try {
+        const vehicle = await api.put(`/vehicles/${id}`, body)
+        const data = vehicle.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
+export const deleteVehicle = createAsyncThunk('vehicle/deleteVehicle', async (body, thunkAPI) => {
+    try {
+        await api.delete(`/vehicles/${body}`)
+        return body;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
+
 const VehicleReducer = createSlice({
     name: 'vehicle',
     initialState: {
@@ -83,6 +107,32 @@ const VehicleReducer = createSlice({
             state.loading = false
         })
         builder.addCase(createVehicle.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(deleteVehicle.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(deleteVehicle.fulfilled, (state, action) => {
+            state.vehicles = state.vehicles.filter((vehicle) => vehicle._id !== action.payload)
+            state.trucks = state.trucks.filter((vehicle) => vehicle._id !== action.payload)
+            state.ships = state.ships.filter((vehicle) => vehicle._id !== action.payload)
+            state.wagons = state.wagons.filter((vehicle) => vehicle._id !== action.payload)
+            state.loading = false
+        })
+        builder.addCase(deleteVehicle.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(updateVehicle.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(updateVehicle.fulfilled, (state, action) => {
+            state.vehicles[state.vehicles.find((vehicle) => vehicle._id === action.payload.vehicle._id )] = action.payload.vehicle
+            // state.trucks = state.trucks.filter((vehicle) => vehicle._id !== action.payload)
+            // state.ships = state.ships.filter((vehicle) => vehicle._id !== action.payload)
+            // state.wagons = state.wagons.filter((vehicle) => vehicle._id !== action.payload)
+            state.loading = false
+        })
+        builder.addCase(updateVehicle.rejected, (state, action) => {
             state.loading = false
         })
     }

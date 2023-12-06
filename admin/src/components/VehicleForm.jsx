@@ -25,7 +25,7 @@ import Loader from './Loader'
 import { createVehicle } from '../store/reducer/VehicleReducer'
 
 
-const BusForm = ({ update }) => {
+const VehicleForm = ({ update }) => {
     const dispatch = useDispatch()
     const { toast } = useToast()
 
@@ -37,7 +37,7 @@ const BusForm = ({ update }) => {
             message: "Vehicle Model must be at least 2 characters.",
         }),
         registerNumber: z.string().min(3, {
-            message: "Bus set must be at least 3 characters."
+            message: "Vehicle set must be at least 3 characters."
         }),
         capacity: z.number(),
         type: z.enum(["truck", "wagon", "ship"], {
@@ -212,4 +212,4 @@ const BusForm = ({ update }) => {
     )
 }
 
-export default BusForm
+export default VehicleForm

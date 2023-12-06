@@ -36,10 +36,46 @@ export const currentUser = createAsyncThunk('user/currentUser', async (body, thu
     }
 })
 
+export const createUser = createAsyncThunk('user/create', async (body, thunkAPI) => {
+    try {
+        const user = await api.post('/users/create', body)
+        const data = user.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
+export const getAllUsers = createAsyncThunk('user/getAllUsers', async (body, thunkAPI) => {
+    try {
+        const user = await api.get('/users')
+        const data = user.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
+export const deleteUser = createAsyncThunk('user/deleteUser', async (body, thunkAPI) => {
+    try {
+        await api.delete(`/users/${body}`)
+        return body;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
 const UserReducer = createSlice({
     name: 'user',
     initialState: {
         user: null,
+        users: [],
         loading: false
     },
     reducers: {
@@ -79,6 +115,36 @@ const UserReducer = createSlice({
             state.loading = false
         })
         builder.addCase(currentUser.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(createUser.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(createUser.fulfilled, (state, action) => {
+            state.users.push(action.payload.user)
+            state.loading = false
+        })
+        builder.addCase(createUser.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(getAllUsers.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getAllUsers.fulfilled, (state, action) => {
+            state.users = action.payload.users
+            state.loading = false
+        })
+        builder.addCase(getAllUsers.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(deleteUser.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(deleteUser.fulfilled, (state, action) => {
+            state.users = state.users.filter((user) => user._id !== action.payload)
+            state.loading = false
+        })
+        builder.addCase(deleteUser.rejected, (state, action) => {
             state.loading = false
         })
     }

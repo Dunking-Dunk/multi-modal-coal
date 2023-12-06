@@ -1,4 +1,6 @@
 import express from 'express'
+import cloudinary from "cloudinary";
+
 import User from '../models/User.js'
 import Error from '../utils/Error.js'
 import sendToken from '../utils/sendToken.js'
@@ -90,8 +92,19 @@ router.delete('/:id', authenticatedUser, async (req, res) => {
   })
 })
 
-router.post('/create', authenticatedUser, async (req, res) => { 
-  const { name, password, email, role,age,contact } = req.body;
+router.post('/create', authenticatedUser, async (req, res, next) => {
+  const { name, password, email, role, age, contact, image } = req.body;
+  
+  const existing = await User.findOne({ email: email })
+  console.log(existing)
+  if (existing) {
+    return next(new Error('User already exist with the mail', 400))
+  }
+  
+  const result = await cloudinary.v2.uploader.upload(image, {
+    folder: "multi-modal-coal-users",
+  });
+
   
   const user = await User.create({
     name,
@@ -99,7 +112,11 @@ router.post('/create', authenticatedUser, async (req, res) => {
     email,
     age,
     role,
-    contact
+    contact,
+    image: {
+      public_id: result.public_id,
+      url: result.secure_url
+    }
   })
 
   res.status(201).json({

@@ -45,8 +45,6 @@ function App() {
         {user ? <Route element={<Main />} path='*' /> :
           <Route element={<Login />} path='/login' />
         }
-        {/* <Route element={<Main />} path='*' /> */}
-
       </Routes>
       <Toaster />
     </>

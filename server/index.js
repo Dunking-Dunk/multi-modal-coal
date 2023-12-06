@@ -7,7 +7,9 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
-import {connection} from './socket.js'
+import { v2 as cloudinary } from "cloudinary";
+
+import { connection } from './socket.js'
 
 import UserRouter from './routes/User.js'
 import VehicleRouter from './routes/Vehicle.js'
@@ -28,6 +30,13 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+  cloudinary.config({
+    cloud_name: "diqcvwlmu",
+    api_key: "431324572471635",
+    api_secret: process.env.CLOUDINARY_API_KEY,
+  });
+
 connection()
 
   

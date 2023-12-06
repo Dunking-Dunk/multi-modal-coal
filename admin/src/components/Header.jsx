@@ -40,9 +40,9 @@ export default function Header({ props }) {
                     <NavigationLink href="/">Dashboard</NavigationLink>
                     <NavigationLink href="/vehicle">Vehicle</NavigationLink>
                     <NavigationLink href="/user">User</NavigationLink>
-                    {/* <NavigationLink href='/stop'>Stops</NavigationLink>
-                    <NavigationLink href='/driver'>Drivers</NavigationLink>
-                    <NavigationLink href='/announcement'>Announcement</NavigationLink>
+                    <NavigationLink href='/places'>Place</NavigationLink>
+                    <NavigationLink href='/shipping'>Shipping</NavigationLink>
+                    {/* <NavigationLink href='/announcement'>Announcement</NavigationLink>
                     <NavigationLink href='/notification'>Notifications</NavigationLink> */}
                 </nav>
                 <div className="flex items-center content-center flex-row  gap-x-6">
