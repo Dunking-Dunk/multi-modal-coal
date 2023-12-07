@@ -5,18 +5,23 @@ import { Button } from '@/components/ui/button'
 import { MarkerF } from '@react-google-maps/api';
 import Map from './Map'
 
-const MapMarker = ({ getAddress, getCoord }) => {
-    const [coords, setCoords] = useState({ lat: 13.078339, lng: 80.180592 })
+const MapMarker = ({ getAddress, setCoords, coords }) => {
+
     const [input, setInput] = useState('')
 
     useEffect(() => {
-        getCoord(coords)
+        setCoords(coords)
         let service = new google.maps.Geocoder();
         const helper = async () => {
+            try {
 
-            const res = await service.geocode({ location: coords })
+                const res = await service.geocode({ location: coords })
 
-            getAddress({ address: res.results[0].formatted_address, placeId: res.results[0].place_id })
+                getAddress({ address: res.results[0].formatted_address, placeId: res.results[0].place_id })
+            } catch (error) {
+                // console.log(error)
+            }
+
         }
         helper()
     }, [coords])
@@ -38,7 +43,7 @@ const MapMarker = ({ getAddress, getCoord }) => {
             console.log()
             setCoords({ lat: res.results[0].geometry.location.lat(), lng: res.results[0].geometry.location.lng() })
         } catch (err) {
-            console.log(err)
+            // console.log(err)
         }
 
     }

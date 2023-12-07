@@ -4,12 +4,14 @@ import { useParams } from 'react-router-dom'
 import Loader from "../../components/Loader";
 import { getPlace } from "../../store/reducer/PlaceReducer";
 import CardOverview from "../../components/OverviewCard";
+import { Card } from '@/components/ui/Card'
 
 import Map from '../../components/map/Map'
 
 const ViewPlace = () => {
     const { id } = useParams()
     const dispatch = useDispatch()
+
     const { place } = useSelector((state) => state.Place)
 
     useEffect(() => {
@@ -27,13 +29,18 @@ const ViewPlace = () => {
 
                     </div>
                 </div>
-                <div className="flex flex-row space-x-2">
-                    <CardOverview title='Type' description={"Place Type"} value={place.type.toUpperCase()} />
-                    <CardOverview title='Name' description={"Place Name"} value={place.name} />
-                    <CardOverview title='Coal Type' description={"Coal Type"} value={place.coalType} />
-                    <CardOverview title='Quantity' description={"Coal Quantity"} value={place.quantity} />
-                    <CardOverview title='Location' description={"Location"} value={place.location} />
-                    <CardOverview title='Address' description={"Address"} value={place.address} />
+                <div className="flex flex-col space-y-2">
+                    <h3 className="text-4xl font-bold">Place Detail</h3>
+                    <div className="flex flex-row space-x-2">
+                        <CardOverview title='Type' description={"Place Type"} value={place.type.toUpperCase()} />
+                        <CardOverview title='Name' description={"Place Name"} value={place.name} />
+                        <CardOverview title='Coal Stored' description={"Coal Stored (in tons)"} value={place.coalStored} />
+                        <CardOverview title='Supervisor' description={"Place supervisor"} value={place.supervisor.name} />
+                    </div>
+                    <Card className='p-4'>
+                        <h5 className="font-bold text-2xl">Place Address</h5>
+                        <p>{place.address}</p>
+                    </Card>
                 </div>
             </div>
         )

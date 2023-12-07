@@ -35,7 +35,7 @@ router.post('/',authenticatedUser, async (req, res) => {
 router.get('/:id',authenticatedUser, async (req, res) => {
     const { id } = req.params
     
-    const place = await Place.findById(id)
+    const place = await Place.findById(id).populate('supervisor')
 
     res.status(200).json({
         success: true,

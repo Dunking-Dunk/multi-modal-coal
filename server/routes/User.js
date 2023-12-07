@@ -81,11 +81,39 @@ router.get('/:id', authenticatedUser, async (req, res) => {
   })
 })
 
-router.put('/:id', authenticatedUser, async (req, res) => { 
-  const {id} = req.params;
-  const user = await User.findByIdAndUpdate(id,{...req.body})
+router.put('/:id', authenticatedUser, async (req, res,next) => { 
+  const { id } = req.params;
+  const { name, password, email, role, age, contact, image } = req.body;
+  
+  const existingUser = await User.findById(id)
 
-  res.status(201).json({
+  if (!existingUser) {
+    return next(new Error("User doesn't exist", 400))
+  }
+  console.log(existingUser.image)
+  if (existingUser.image.public_id) {
+    await cloudinary.v2.uploader.destroy(existingUser.image.public_id)
+  }
+
+
+  const result = await cloudinary.v2.uploader.upload(image, {
+    folder: "multi-modal-coal-users",
+  });
+
+  const user = await User.findByIdAndUpdate(id,{
+    name,
+    password,
+    email,
+    age,
+    role,
+    contact,
+    image: {
+      public_id: result.public_id,
+      url: result.secure_url
+    }
+  },  {new: true, runValidators: true})
+
+  res.status(200).json({
     success: true,
     user
   })
@@ -106,7 +134,7 @@ router.post('/create', authenticatedUser, async (req, res, next) => {
   const { name, password, email, role, age, contact, image } = req.body;
   
   const existing = await User.findOne({ email: email })
-  console.log(existing)
+ 
   if (existing) {
     return next(new Error('User already exist with the mail', 400))
   }

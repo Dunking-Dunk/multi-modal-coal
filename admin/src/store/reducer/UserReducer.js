@@ -48,6 +48,18 @@ export const createUser = createAsyncThunk('user/create', async (body, thunkAPI)
     }
 })
 
+export const updateUser = createAsyncThunk('user/updateUser', async (body, thunkAPI) => {
+    try {
+        const user = await api.put(`/users/${body.id}`, body.data)
+        const data = user.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
 export const getAllUsers = createAsyncThunk('user/getAllUsers', async (body, thunkAPI) => {
     try {
         const user = await api.get('/users')
@@ -142,6 +154,16 @@ const UserReducer = createSlice({
             state.loading = false
         })
         builder.addCase(createUser.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(updateUser.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(updateUser.fulfilled, (state, action) => {
+            state.users[state.users.findIndex((user) => user._id === action.payload.user._id )] = action.payload.user
+            state.loading = false
+        })
+        builder.addCase(updateUser.rejected, (state, action) => {
             state.loading = false
         })
         builder.addCase(getAllUsers.pending, (state, action) => {

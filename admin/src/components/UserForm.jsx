@@ -17,7 +17,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import Loader from './Loader'
-import { createUser, getUser } from '../store/reducer/UserReducer'
+import { createUser, getUser, updateUser } from '../store/reducer/UserReducer'
 
 
 const UserForm = ({ update }) => {
@@ -90,22 +90,42 @@ const UserForm = ({ update }) => {
     }
 
     const onSubmit = async (data) => {
-        dispatch(createUser({ ...data, image })).then((state) => {
-            if (!state.error) {
-                form.reset()
-                toast({
-                    title: 'Created User',
-                    description: 'Successfully created User'
-                })
-            } else {
+        if (update) {
+            dispatch(updateUser({ id: update, data: { ...data, image } })).then((state) => {
+                if (!state.error) {
+                    form.reset()
+                    toast({
+                        title: 'Updated User',
+                        description: 'Successfully Updated User'
+                    })
+                } else {
 
-                toast({
-                    title: 'Error',
-                    description: state.payload.error.message,
-                    variant: 'destructive'
-                })
-            }
-        })
+                    toast({
+                        title: 'Error',
+                        description: state.payload.error.message,
+                        variant: 'destructive'
+                    })
+                }
+            })
+        } else {
+            dispatch(createUser({ ...data, image })).then((state) => {
+                if (!state.error) {
+                    form.reset()
+                    toast({
+                        title: 'Created User',
+                        description: 'Successfully created User'
+                    })
+                } else {
+
+                    toast({
+                        title: 'Error',
+                        description: state.payload.error.message,
+                        variant: 'destructive'
+                    })
+                }
+            })
+        }
+
     }
 
 

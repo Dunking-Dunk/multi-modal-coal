@@ -17,13 +17,16 @@ import {
 } from "@/components/ui/popover"
 
 
-export function Combobox({ list, onChange, title }) {
+export function Combobox({ list, onChange, title, defaultValue }) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [value, setValue] = React.useState('')
+
+  React.useEffect(() => {
+    setValue(defaultValue)
+  }, [defaultValue])
   React.useEffect(() => {
     onChange(value)
   }, [value])
-
 
   return (
     <Popover open={open} onOpenChange={setOpen} >

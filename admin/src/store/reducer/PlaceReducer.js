@@ -37,9 +37,10 @@ export const createPlace = createAsyncThunk('places/createPlace', async (body, t
     }
 });
 
-export const updatePlace = createAsyncThunk('places/updatePlace', async ({ id, body }, thunkAPI) => {
+export const updatePlace = createAsyncThunk('places/updatePlace', async (body, thunkAPI) => {
     try {
-        const place = await api.put(`/places/${id}`, body);
+      
+        const place = await api.put(`/places/${body.id}`, body.data);
         const data = place.data;
         return data;
     } catch (err) {
@@ -126,7 +127,12 @@ const PlaceReducer = createSlice({
             state.loading = true;
         });
         builder.addCase(updatePlace.fulfilled, (state, action) => {
-            state.places[state.places.find((place) => place._id === action.payload.place._id)] = action.payload.place;
+           
+            state.places[state.places.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
+            state.mines[state.mines.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
+            state.inventory[state.inventory.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
+            state.railyard[state.railyard.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
+            state.port[state.port.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
             state.loading = false;
         });
         builder.addCase(updatePlace.rejected, (state, action) => {
