@@ -17,7 +17,7 @@ const Railyard = () => {
                 </Map>
             </div>
             <h3 className="text-4xl font-bold">Manage Railyards</h3>
-            <DataTable columns={PlaceColumn} data={railyard} />
+            {railyard && <DataTable columns={PlaceColumn} data={railyard} />}
         </div>
     )
 }

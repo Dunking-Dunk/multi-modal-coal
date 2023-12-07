@@ -33,6 +33,11 @@ export const VehicleColumn = [{
 {
   accessorKey: "capacity",
   header: "Total Capacity",
+  cell: ({ row }) => {
+    return (
+      <p>{row.getValue('capacity')} (in Tons)</p>
+    );
+  },
 },
 {
   accessorKey: "status",

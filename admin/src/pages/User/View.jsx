@@ -28,7 +28,7 @@ const ViewUser = () => {
                 <div className="flex flex-row w-full h-full">
                     <div className="w-1/2 flex items-center justify-center">
                         <div className="rounded-full w-[500px] h-[500px] overflow-hidden">
-                            <img src={person?.image?.url} className='w-full h-full object-cover relative' />
+                            <img src={person?.image?.url} className='w-full h-full object-contain relative' />
                         </div>
                     </div>
                     <div className="w-2/3 flex flex-col space-y-4">

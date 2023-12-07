@@ -127,13 +127,8 @@ const PlaceReducer = createSlice({
             state.loading = true;
         });
         builder.addCase(updatePlace.fulfilled, (state, action) => {
-           
             state.places[state.places.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
-            state.mines[state.mines.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
-            state.inventory[state.inventory.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
-            state.railyard[state.railyard.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
-            state.port[state.port.findIndex((place) => place._id === action.payload.place._id)] = action.payload.place;
-            state.loading = false;
+            state[action.payload.place.type][state[action.payload.place.type].findIndex((place) => place._id === action.payload.place._id )] = action.payload.place
         });
         builder.addCase(updatePlace.rejected, (state, action) => {
             state.loading = false;

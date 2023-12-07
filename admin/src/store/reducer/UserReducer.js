@@ -160,7 +160,8 @@ const UserReducer = createSlice({
             state.loading = true
         })
         builder.addCase(updateUser.fulfilled, (state, action) => {
-            state.users[state.users.findIndex((user) => user._id === action.payload.user._id )] = action.payload.user
+            state.users[state.users.findIndex((user) => user._id === action.payload.user._id)] = action.payload.user
+            state[`${action.payload.user.role}s`][state[`${action.payload.user.role}s`].findIndex((user) => user._id === action.payload.user._id )] = action.payload.user
             state.loading = false
         })
         builder.addCase(updateUser.rejected, (state, action) => {

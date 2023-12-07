@@ -127,10 +127,8 @@ const VehicleReducer = createSlice({
             state.loading = true
         })
         builder.addCase(updateVehicle.fulfilled, (state, action) => {
-            state.vehicles[state.vehicles.findIndex((vehicle) => vehicle._id === action.payload.vehicle._id )] = action.payload.vehicle
-            // state.trucks = state.trucks.filter((vehicle) => vehicle._id !== action.payload)
-            // state.ships = state.ships.filter((vehicle) => vehicle._id !== action.payload)
-            // state.wagons = state.wagons.filter((vehicle) => vehicle._id !== action.payload)
+            state.vehicles[state.vehicles.findIndex((vehicle) => vehicle._id === action.payload.vehicle._id)] = action.payload.vehicle
+            state[`${action.payload.vehicle.type}s`][state[`${action.payload.vehicle.type}s`].findIndex((vehicle) => vehicle._id === action.payload.vehicle._id )] = action.payload.vehicle
             state.loading = false
         })
         builder.addCase(updateVehicle.rejected, (state, action) => {
