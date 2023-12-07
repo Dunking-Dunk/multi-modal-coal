@@ -17,7 +17,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import Loader from './Loader'
-import { createUser } from '../store/reducer/UserReducer'
+import { createUser, getUser } from '../store/reducer/UserReducer'
 
 
 const UserForm = ({ update }) => {
@@ -25,6 +25,23 @@ const UserForm = ({ update }) => {
     const { toast } = useToast()
     const { loading } = useSelector((state) => state.User)
     const [image, setImage] = useState('')
+
+    useEffect(() => {
+        if (update) {
+            dispatch(getUser(update)).then((state) => {
+                const user = state.payload.user
+                form.reset({
+                    name: user.name,
+                    email: user.email,
+                    password: '',
+                    contact: user.contact,
+                    role: user.role,
+                    age: user.age
+                })
+            })
+
+        }
+    }, [])
 
     const FormSchema = z.object({
         name: z.string().min(2, {

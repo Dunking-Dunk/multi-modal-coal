@@ -55,7 +55,7 @@ router.put('/:id', authenticatedUser,async (req, res) => {
     
     const vehicle = await Vehicle.findByIdAndUpdate(id, {
         ...req.body
-    })
+    }, {new: true, runValidators: true})
 
     res.status(200).json({
         success: true,

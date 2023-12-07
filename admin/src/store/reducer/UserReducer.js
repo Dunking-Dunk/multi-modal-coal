@@ -60,6 +60,19 @@ export const getAllUsers = createAsyncThunk('user/getAllUsers', async (body, thu
     }
 })
 
+export const getUser = createAsyncThunk('user/getUser', async (body, thunkAPI) => {
+    try {
+        const user = await api.get(`/users/${body}`)
+        const data = user.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
+
 export const deleteUser = createAsyncThunk('user/deleteUser', async (body, thunkAPI) => {
     try {
         await api.delete(`/users/${body}`)
@@ -76,6 +89,10 @@ const UserReducer = createSlice({
     initialState: {
         user: null,
         users: [],
+        person: null,
+        admins: [],
+        supervisors: [],
+        drivers: [],
         loading: false
     },
     reducers: {
@@ -132,9 +149,22 @@ const UserReducer = createSlice({
         })
         builder.addCase(getAllUsers.fulfilled, (state, action) => {
             state.users = action.payload.users
+            state.supervisors = action.payload.users.filter(user => user.role === 'supervisor')
+            state.drivers = action.payload.users.filter(user => user.role === 'driver')
+            state.admins = action.payload.users.filter(user => user.role === 'admin')
             state.loading = false
         })
         builder.addCase(getAllUsers.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(getUser.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getUser.fulfilled, (state, action) => {
+            state.person = action.payload.user
+            state.loading = false
+        })
+        builder.addCase(getUser.rejected, (state, action) => {
             state.loading = false
         })
         builder.addCase(deleteUser.pending, (state, action) => {

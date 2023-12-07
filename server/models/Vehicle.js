@@ -39,6 +39,10 @@ const vehicleSchema = mongoose.Schema({
         required: true,
         unique: true
     },
+    tracker: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tracker'
+    },
     driver: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

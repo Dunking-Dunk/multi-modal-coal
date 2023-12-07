@@ -10,7 +10,6 @@ const MapView = (props) => {
         lng: 80.180592
     });
 
-
     function handleLoad(map) {
         mapRef.current = map;
     }
@@ -33,9 +32,7 @@ const MapView = (props) => {
                 mapContainerClassName="map-container"
                 {...props}
                 options={{
-                    clickableIcons: false,
                     mapId: "28fbb85fa828483f",
-                    disableDefaultUI: false
                 }}
             >
                 {props.children}
@@ -44,4 +41,4 @@ const MapView = (props) => {
     )
 }
 
-export default memo(MapView)
+export default MapView

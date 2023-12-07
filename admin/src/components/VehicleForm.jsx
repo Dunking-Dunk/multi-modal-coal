@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -22,12 +22,32 @@ import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/components/ui/use-toast"
 import Loader from './Loader'
 
-import { createVehicle } from '../store/reducer/VehicleReducer'
+import { createVehicle, getVehicle, updateVehicle } from '../store/reducer/VehicleReducer'
 
 
 const VehicleForm = ({ update }) => {
     const dispatch = useDispatch()
     const { toast } = useToast()
+    const { loading } = useSelector((state) => state.Vehicle)
+
+    useEffect(() => {
+        if (update) {
+            dispatch(getVehicle(update)).then((state) => {
+                const vehicle = state.payload.vehicle
+
+                form.reset({
+                    make: vehicle.make,
+                    model: vehicle.model,
+                    registerNumber: vehicle.registerNumber,
+                    capacity: vehicle.capacity,
+                    type: vehicle.type,
+                    status: vehicle.status,
+                    trackerId: vehicle.trackerId
+                })
+            })
+        }
+    }, [])
+
 
     const FormSchema = z.object({
         make: z.string().min(2, {
@@ -65,16 +85,41 @@ const VehicleForm = ({ update }) => {
     )
 
     const onSubmit = async (data) => {
-        dispatch(createVehicle(data)).then((state) => {
-            console.log(state)
-            if (!state.error) {
-                form.reset()
-                toast({
-                    title: "Vehicle Created",
-                    description: `${data.type} is Created`
-                })
-            }
-        })
+        if (update) {
+            dispatch(updateVehicle({ data, id: update })).then((state) => {
+
+                if (!state.error) {
+                    form.reset()
+                    toast({
+                        title: "Vehicle Updated",
+                        description: `${data.type} is Created`
+                    })
+                } else {
+                    toast({
+                        title: 'Error',
+                        description: state.payload.error.message,
+                        variant: 'destructive'
+                    })
+                }
+            })
+        } else {
+            dispatch(createVehicle(data)).then((state) => {
+                if (!state.error) {
+                    form.reset()
+                    toast({
+                        title: "Vehicle Created",
+                        description: `${data.type} is Created`
+                    })
+                } else {
+                    toast({
+                        title: 'Error',
+                        description: state.payload.error.message,
+                        variant: 'destructive'
+                    })
+                }
+            })
+        }
+
     }
 
 
@@ -206,7 +251,8 @@ const VehicleForm = ({ update }) => {
                         )}
                     />
                 </div>
-                <Button type="submit" className='w-3/6'>Create</Button>
+                {loading ? <Loader /> : <Button type="submit" className='w-3/6'>{update ? 'Update' : 'Create'}</Button>}
+
             </form>
         </Form>
     )

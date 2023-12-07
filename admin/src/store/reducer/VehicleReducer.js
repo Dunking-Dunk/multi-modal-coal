@@ -38,9 +38,10 @@ export const createVehicle = createAsyncThunk('vehicle/createVehicle', async (bo
     }
 })
 
-export const updateVehicle = createAsyncThunk('vehicle/updateVehicle', async ({id,body}, thunkAPI) => {
+export const updateVehicle = createAsyncThunk('vehicle/updateVehicle', async (body, thunkAPI) => {
     try {
-        const vehicle = await api.put(`/vehicles/${id}`, body)
+    
+        const vehicle = await api.put(`/vehicles/${body.id}`, body.data)
         const data = vehicle.data;
         return data;
     } catch (err) {
@@ -126,7 +127,7 @@ const VehicleReducer = createSlice({
             state.loading = true
         })
         builder.addCase(updateVehicle.fulfilled, (state, action) => {
-            state.vehicles[state.vehicles.find((vehicle) => vehicle._id === action.payload.vehicle._id )] = action.payload.vehicle
+            state.vehicles[state.vehicles.findIndex((vehicle) => vehicle._id === action.payload.vehicle._id )] = action.payload.vehicle
             // state.trucks = state.trucks.filter((vehicle) => vehicle._id !== action.payload)
             // state.ships = state.ships.filter((vehicle) => vehicle._id !== action.payload)
             // state.wagons = state.wagons.filter((vehicle) => vehicle._id !== action.payload)

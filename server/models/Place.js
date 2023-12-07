@@ -6,12 +6,8 @@ const placeSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter your name"],
     },
-    coalType: {
-        type: String,
-        required: [true, "Please enter Coal Type"],
-    },
-    quantity: {
-        type: String,
+    coalStored: {
+        type: Number,
         required: [true, "Please enter Coal Quantity"],
     },
     vehicleHousing: [{
@@ -38,9 +34,16 @@ const placeSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter the address"],
     },
+    placeId: {
+        type: String,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+    supervisor: {
+         type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 })
 

@@ -26,6 +26,7 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("successfully connected to Mongodb");
+    connection()
   })
   .catch((err) => {
     console.log(err);
@@ -37,7 +38,7 @@ mongoose
     api_secret: process.env.CLOUDINARY_API_KEY,
   });
 
-connection()
+
 
   
 app.use(

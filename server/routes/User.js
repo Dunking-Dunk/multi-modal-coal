@@ -62,12 +62,22 @@ router.get("/me", authenticatedUser, async (req, res) => {
   });
 });
 
+
 router.get('/', authenticatedUser, async (req, res) => { 
   const users = await User.find({})
 
   res.status(200).json({
     success: true,
     users
+  })
+})
+
+router.get('/:id', authenticatedUser, async (req, res) => { 
+  const user = await User.findById(req.params.id)
+
+  res.status(200).json({
+    success: true,
+    user
   })
 })
 

@@ -13,7 +13,7 @@ const trackerSchema = mongoose.Schema({
         },
         coordinate: {
             type: [Number],
-            required: true
+            required: true,
         },
     },
     //all tcu data comes here

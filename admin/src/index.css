@@ -81,3 +81,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+.map-container {
+  height: 100%;
+  width: 100%;
+}

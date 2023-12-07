@@ -5,10 +5,10 @@ import Map from "../../components/map/Map";
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
 import DataTable from "../../components/DataTable";
-import { PlaceColumn } from "../../lib/columns"; 
+import { PlaceColumn } from "../../lib/columns";
 
 const Dashboard = () => {
-    const { places } = useSelector((state) => state.Place)  
+    const { places } = useSelector((state) => state.Place)
 
     return (
         <div className="flex flex-col gap-y-4 w-full h-full">
@@ -21,10 +21,10 @@ const Dashboard = () => {
             </div>
             <div className="w-full h-[600px]">
                 <Map>
-                    
+
                 </Map>
             </div>
-            <DataTable columns={PlaceColumn} data={places} filterColumn='name' />  
+            <DataTable columns={PlaceColumn} data={places} filterColumn='name' />
         </div>
     )
 }

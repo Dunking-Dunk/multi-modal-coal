@@ -16,6 +16,26 @@ const PointSchema = {
     }
 }
 
+const subShippingSchema = mongoose.Schema({
+    origin: PointSchema,
+    destination: PointSchema,
+    vehicles: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vehicle',
+        required: [true, 'Vehicle is required']
+    }],
+    numberOfVehicle: {
+        type: Number,
+        required: [true, 'Number of Vehicle is required'],
+    },
+    startTime: {
+        type: Date
+    },
+    eta: {
+        type: Date
+    }
+})
+
 const shippingSchema = mongoose.Schema({
     quantity: {
         type: Number,
@@ -23,31 +43,15 @@ const shippingSchema = mongoose.Schema({
     },
     origin: PointSchema ,
     destination: PointSchema,
-    vehicles: [
-        {
-            origin: PointSchema,
-            destination: PointSchema,
-            vehicle: [{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Vehicle',
-                required: [true, 'Vehicle is required']
-            }],
-            numberOfVehicle: {
-                type: Number,
-                required: [true, 'Number of Vehicle is required'],
-            },
-            eta: {
-                type: Number
-            },
-            deadline: {
-                type: Date
-            }
-       }
+    subShipping: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SubShipping'
+    }
     ],
-    eta: {
-        type: Number
+    startTime: {
+        type: Date
     },
-    deadline: {
+    eta: {
         type: Date
     },
     createdAt: {
@@ -56,6 +60,8 @@ const shippingSchema = mongoose.Schema({
     },
 })
 
+
+export const SubShipping = mongoose.Schema('SubShipping', subShippingSchema)
 const Shipping = mongoose.model('Shipping', shippingSchema)
 
 export default Shipping

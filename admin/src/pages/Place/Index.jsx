@@ -7,6 +7,11 @@ import CreatePlace from "./CreatePlace";
 import UpdatePlace from './UpdatePlace'
 import ViewPlace from "./ViewPlace";
 
+import Mines from "./Mines";
+import Inventory from "./Inventory";
+import Railyard from "./Railyard";
+import Port from "./Port";
+
 const Place = () => {
     return (
         <>
@@ -15,6 +20,10 @@ const Place = () => {
                 <Route element={<Dashboard />} path='/' />
                 <Route element={<ViewPlace />} path='/:id' />
                 <Route element={<CreatePlace />} path='/create' />
+                <Route element={<Mines />} path='/mines' />
+                <Route element={<Inventory />} path='/inventory' />
+                <Route element={<Railyard />} path='/railyard' />
+                <Route element={<Port />} path='/port' />
                 <Route element={<UpdatePlace />} path='/update/:id' />
             </Routes>
         </>

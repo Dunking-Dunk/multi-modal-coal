@@ -2,10 +2,9 @@ import React from "react";
 import { useSelector } from 'react-redux'
 
 import Map from "../../components/map/Map";
-import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import { VehicleColumn } from "../../lib/columns";
+import CardOverview from "../../components/OverviewCard";
 
 const Dashboard = () => {
     const { vehicles } = useSelector((state) => state.Vehicle)
@@ -13,19 +12,23 @@ const Dashboard = () => {
     return (
         <div className="flex flex-col gap-y-4 w-full h-full">
             <h3 className="font-bold text-4xl">Dashboard</h3>
-            <div className="flex flex-row justify-between border-b-2 py-4">
-                <h5 className="text-2xl">Create a Vehicle</h5>
-                <Button className='w-1/6 py-0 px-0'>
-                    <Link to='create' className='flex items-center justify-center hover:-translate-y-2 transition-all w-full h-full'>Create</Link>
-                </Button>
-
-            </div>
             <div className=" w-full h-[600px]">
                 <Map >
 
                 </Map>
             </div>
-            <DataTable columns={VehicleColumn} data={vehicles} filterColumn='registerNumber' />
+            <div className="flex flex-row space-x-4">
+                <CardOverview title='Vehicles' description='Total Number of Vehicles' value={vehicles.length} />
+                <CardOverview title='Active Vehicles' description='Total Number of Active Vehicles' value={vehicles.length} />
+                <CardOverview title='Trucks' description='Total Number of Trucks' value={vehicles.length} />
+                <CardOverview title='Vehicles' description='Total Number of Wagons' value={vehicles.length} />
+                <CardOverview title='Vehicles' description='Total Number of Ships' value={vehicles.length} />
+            </div>
+            <div className="my-4 space-y-2">
+                <h3 className="text-3xl font-semibold">Manage All Vehicles</h3>
+                <DataTable columns={VehicleColumn} data={vehicles} filterColumn='registerNumber' />
+            </div>
+
         </div>
 
     )

@@ -24,17 +24,17 @@ export const connection = () => {
         fullDocument: 'updateLookup',
     }
     
-    // const changeStreamTracker = Tracker.collection.watch([], watchOptions)
+    const changeStreamTracker = Tracker.collection.watch([], watchOptions)
     // const changeStreamStop = Stop.collection.watch([], watchOptions)
     // const changeStreamDriver = Driver.collection.watch([], watchOptions)
-    // changeStreamTracker.on('change', (data) => {
-    //     const fullDocument = data.fullDocument
-    //     if (data.operationType === 'create') {
-    //         const id = String(fullDocument.trackerId)
-    //         io.to(id).emit("getBusLocation", { ...fullDocument});
-    //         io.to('allBus').emit('getAllBusLocation', { ...fullDocument})
-    //     }
-    // })
+    changeStreamTracker.on('change', (data) => {
+        const fullDocument = data.fullDocument
+        if (data.operationType === 'create') {
+            const id = String(fullDocument.trackerId)
+            io.to(id).emit("getBusLocation", { ...fullDocument});
+            io.to('allBus').emit('getAllBusLocation', { ...fullDocument})
+        }
+    })
     // changeStreamStop.on('change', (data: any) => {
     //     const fullDocument = data.fullDocument
     //     if (data.operationType === 'update') {

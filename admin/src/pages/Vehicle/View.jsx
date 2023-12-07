@@ -24,14 +24,19 @@ const ViewVehicle = () => {
                         <Map />
                     </div>
                     <div className="flex flex-col w-1/4 gap-y-2 h-full">
-
+                        <CardOverview title='Status' description={"Vehicle Status"} value={vehicle.status} />
+                        <CardOverview title='Register Number' description={"Vehicle Registration Number"} value={vehicle.registerNumber} />
+                        <CardOverview title='Make' description={"Vehicle Make"} value={vehicle.make} />
+                        <CardOverview title='Make' description={"Vehicle Make"} value={vehicle.make} />
                     </div>
                 </div>
+                <h1 className="text-3xl font-bold">Vehicle Details</h1>
                 <div className="flex flex-row space-x-2">
                     <CardOverview title='Type' description={"Vehicle Type"} value={vehicle.type.toUpperCase()} />
                     <CardOverview title='Register Number' description={"Vehicle Registration Number"} value={vehicle.registerNumber} />
                     <CardOverview title='Make' description={"Vehicle Make"} value={vehicle.make} />
                     <CardOverview title='Model' description={"Vehicle Model"} value={vehicle.model} />
+                    <CardOverview title='Capacity' description={"Vehicle Coal holding capacity"} value={vehicle.capacity} />
                 </div>
             </div>
         )

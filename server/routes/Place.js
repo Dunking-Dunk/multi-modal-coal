@@ -11,7 +11,7 @@ router.get('/', authenticatedUser,async (req, res) => {
     let places;
 
     if (!type) {
-        places = await Place.find({})
+        places = await Place.find({}).populate('supervisor')
     } else {
         places = await Place.find({ type})
     }
