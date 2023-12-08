@@ -1,18 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
-import Map from "../../components/map/Map";
 import DataTable from "../../components/DataTable";
 import { VehicleColumn } from "../../lib/columns";
 import CardOverview from '../../components/OverviewCard'
+import AllVehiclesView from "../../components/map/allVehicles";
+import socket from '../../api/socket'
 
 const Train = () => {
     const { search } = useLocation()
     const manage = new URLSearchParams(search).get('manage')
     const { wagons } = useSelector((state) => state.Vehicle)
+    const [trackers, setTrackers] = useState(null)
+
+    useEffect(() => {
+        if (wagons) {
+            socket.getAllVehiclesLocations("wagon", setTrackers)
+            return () => {
+                socket.stopAllVehicleLocations("wagon")
+            }
+        }
+    }, [])
 
     if (manage) {
         return (
@@ -35,9 +46,7 @@ const Train = () => {
             <h1 className="text-4xl font-bold">Wagons</h1>
             <div className="flex flex-row space-x-4">
                 <div className="w-5/6 h-[600px]">
-                    <Map >
-
-                    </Map>
+                    <AllVehiclesView trackers={trackers} allVehicles={wagons} />
                 </div>
                 <div className="flex flex-col space-y-4 w-1/6">
                     <CardOverview title='Total' description='Total Number of Wagons' value={wagons.length} />

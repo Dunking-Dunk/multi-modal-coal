@@ -45,7 +45,8 @@ const PlaceForm = ({ update }) => {
                     coalStored: place.coalStored,
                     type: place.type,
                     address: place.address,
-                    supervisor: place.supervisor._id
+                    supervisor: place.supervisor._id,
+                    state: place.state
                 })
             }, [])
         }
@@ -61,8 +62,11 @@ const PlaceForm = ({ update }) => {
         type: z.enum(["mines", "inventory", "railyard", "port"], {
             required_error: "You need to select a place type.",
         }),
-        address: z.string().min(2, {
-            message: "Address must be at least 2 characters.",
+        address: z.string().min(6, {
+            message: "Address must be at least 6 characters.",
+        }),
+        state: z.string().min(2, {
+            message: "State must be at least 2 characters.",
         }),
         supervisor: z.string()
     });
@@ -74,7 +78,8 @@ const PlaceForm = ({ update }) => {
             coalStored: '',
             type: 'railyard',
             address: '',
-            supervisor: ''
+            supervisor: '',
+            state: ''
         },
     });
 
@@ -229,21 +234,34 @@ const PlaceForm = ({ update }) => {
                     <FormDescription >Mark the pointer to the location of the place</FormDescription>
                     <LocationPicker getAddress={setAddress} setCoords={setCoords} coords={coords} />
                 </div>
-                <div className='space-y-4'>
-                    <FormField
-                        control={form.control}
-                        name="address"
-                        render={({ field }) => (
-                            <FormItem className='w-3/6'>
-                                <FormLabel>Place Address</FormLabel>
-                                <FormControl>
-                                    <Textarea placeholder="Type your message here." {...field} value={address.address} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
+                <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                        <FormItem className='w-3/6'>
+                            <FormLabel>State</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Coal stored in inventory"  {...field} value={address.state} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                        <FormItem className='w-3/6'>
+                            <FormLabel>Place Address</FormLabel>
+                            <FormControl>
+                                <Textarea placeholder="Type your message here." {...field} value={address.address} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
                 {loading ? <Loader /> : <Button type="submit" className='w-3/6'>{update ? 'Update' : 'Create'}</Button>}
 
             </form>

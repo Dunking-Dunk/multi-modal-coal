@@ -33,7 +33,7 @@ const vehicleSchema = mongoose.Schema({
     shippingStatus: {
         type: Boolean
     },
-    //this is the id that is present in respective vehicle tcu
+    //this is the id that is present in respective vehicle tcu with base details
     trackerId: {
         type: String,
         required: true,
@@ -43,6 +43,22 @@ const vehicleSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tracker'
     },
+    speed: {
+        type: Number,
+        default: 0
+    },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+        },
+        coordinate: {
+            type: [Number],
+            default: [0,0]
+        },
+    },
+    //
     driver: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

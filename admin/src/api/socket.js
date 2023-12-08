@@ -19,33 +19,35 @@ class Socket {
         this.socket.on("connect", () => {
             console.log("connected to the server");
         });
+     
     }
 
-    //   getAllBusLocations() {
-    //     this.socket.emit("join-room", "allBus")
-    //     this.socket?.on("getAllBusLocation", (data) => {
-    //       store.dispatch(changeCoords(data))
-    //     });
-    //   }
+    getAllVehiclesLocations(room,setTrackers) {
+        this.socket.emit("join-room", room)
+          this.socket?.on("getAllVehicleLocation", (data) => {
+            setTrackers(data)
+        });
+    }
 
-    //   stopAllBusLocations() {
-    //     console.log('left')
-    //     this.socket.emit("leave-room", "allBus")
-    //   }
+          stopAllVehicleLocations(room) {
+        this.socket.emit("leave-room", room)
+      }
 
-    //   getBusLocation(room) {
+    getVehicleLocation(room, setVehicle) {
+        this.socket.emit("join-room",room);
+        this.socket.on("getVehicleLocation", (data) => {
+          setVehicle(data)
+        });
+    }
+    
+          stopVehicleLocation(room) {
+        this.socket.emit("leave-room", room);
+      }
 
-    //     this.socket.emit("join-room", room);
-    //     this.socket.on("getBusLocation", (data) => {
-    //       console.log(data)
-    //       store.dispatch(changeCoords(data))
-    //     });
-    //   }
 
-    //   stopBusLocation(room) {
-    //     console.log('left')
-    //     this.socket.emit("leave-room", room);
-    //   }
+  
+
+
 
     //   getUpdatedStop() {
     //     this.socket.on("updateStop", (data) => {
@@ -71,5 +73,5 @@ class Socket {
         });
     }
 }
-
-export default new Socket()
+const socket =  new Socket()
+export default socket

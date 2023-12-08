@@ -16,8 +16,8 @@ const MapMarker = ({ getAddress, setCoords, coords }) => {
             try {
 
                 const res = await service.geocode({ location: coords })
-
-                getAddress({ address: res.results[0].formatted_address, placeId: res.results[0].place_id })
+                const address = res.results[0].address_components.find((address) => address.types[0] === "administrative_area_level_1")
+                getAddress({ address: res.results[0].formatted_address, placeId: res.results[0].place_id, state: address.long_name })
             } catch (error) {
                 // console.log(error)
             }
@@ -39,8 +39,9 @@ const MapMarker = ({ getAddress, setCoords, coords }) => {
 
         try {
             const res = await service.geocode({ address: input })
-            getAddress({ address: res.results[0].formatted_address, placeId: res.results[0].place_id })
-            console.log()
+            const address = res.results[0].address_components.find((address) => address.types[0] === "administrative_area_level_1")
+            getAddress({ address: res.results[0].formatted_address, placeId: res.results[0].place_id, state: address.long_name })
+
             setCoords({ lat: res.results[0].geometry.location.lat(), lng: res.results[0].geometry.location.lng() })
         } catch (err) {
             // console.log(err)

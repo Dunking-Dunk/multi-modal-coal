@@ -14,6 +14,7 @@ import { connection } from './socket.js'
 import UserRouter from './routes/User.js'
 import VehicleRouter from './routes/Vehicle.js'
 import PlaceRouter from './routes/Place.js'
+import TrackerRouter from './routes/Tracker.js'
 
 import ErrorHandler from './middleware/ErrorHandler.js'
 
@@ -55,6 +56,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/users', UserRouter)
 app.use('/api/vehicles', VehicleRouter)
 app.use('/api/places', PlaceRouter)
+app.use('/api/trackers', TrackerRouter)
 
 app.get('/', (req, res) => {
     res.send('hello')

@@ -9,7 +9,7 @@ import { authenticatedUser } from '../middleware/Auth.js'
 const router = express.Router(); 
 
 router.post("/register", async (req, res) => {
-    const { name, password, email, role,age,contact } = req.body;
+    const { name, password, email, role,age,contact,image } = req.body;
   
     const user = await User.create({
       name,
@@ -17,7 +17,8 @@ router.post("/register", async (req, res) => {
         password,
         role,
         age,
-        contact
+      contact,
+        image
     });
   
     sendToken(user, 201, res);

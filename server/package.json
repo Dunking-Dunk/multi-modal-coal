@@ -23,6 +23,7 @@
     "mongoose": "^8.0.2",
     "node-cron": "^3.0.3",
     "socket.io": "^4.7.2",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "web-push": "^3.6.6"
   }
 }

@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState, useCallback, useEffect } from "react";
+import React, { memo, useRef, useState } from "react";
 
 // import { darkMap } from '@/lib/mapTheme'
 import { GoogleMap } from '@react-google-maps/api';
@@ -24,7 +24,7 @@ const MapView = (props) => {
     return (
         <div className="w-full h-full rounded-md overflow-hidden">
             <GoogleMap
-                zoom={15}
+                zoom={7}
                 mapContainerStyle={{ width: '100%', height: '100%' }}
                 onDragEnd={handleCenter}
                 onLoad={handleLoad}
@@ -41,4 +41,4 @@ const MapView = (props) => {
     )
 }
 
-export default MapView
+export default memo(MapView)

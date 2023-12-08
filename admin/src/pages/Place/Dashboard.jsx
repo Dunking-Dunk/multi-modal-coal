@@ -1,11 +1,12 @@
 import React from "react";
 import { useSelector } from 'react-redux'
 
-import Map from "../../components/map/Map";
+import PlaceView from "../../components/map/PlaceView";
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import { PlaceColumn } from "../../lib/columns";
+
 
 const Dashboard = () => {
     const { places } = useSelector((state) => state.Place)
@@ -20,9 +21,7 @@ const Dashboard = () => {
                 </Button>
             </div>
             <div className="w-full h-[600px]">
-                <Map>
-
-                </Map>
+                <PlaceView places={places} />
             </div>
             <DataTable columns={PlaceColumn} data={places} filterColumn='name' />
         </div>

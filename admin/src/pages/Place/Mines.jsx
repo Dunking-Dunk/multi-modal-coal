@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import { PlaceColumn } from "../../lib/columns";
 import DataTable from "../../components/DataTable";
-import Map from "../../components/map/Map";
+import PlaceView from "../../components/map/PlaceView";
 
 const Mines = () => {
     const { mines } = useSelector((state) => state.Place)
@@ -13,9 +13,7 @@ const Mines = () => {
 
             <h1 className="text-4xl font-bold">Mines</h1>
             <div className="h-[600px] w-5/6">
-                <Map >
-
-                </Map>
+                <PlaceView places={mines} />
             </div>
             <h3 className="text-4xl font-bold">Manage Mines</h3>
             <DataTable columns={PlaceColumn} data={mines} />

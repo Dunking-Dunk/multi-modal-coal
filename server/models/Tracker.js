@@ -9,7 +9,7 @@ const trackerSchema = mongoose.Schema({
         type: {
             type: String,
             enum: ['Point'],
-            required: true
+            default: 'Point'
         },
         coordinate: {
             type: [Number],
@@ -20,7 +20,6 @@ const trackerSchema = mongoose.Schema({
     trackerId: {
         type: String,
         required: true,
-        unique: true
     },//trackerId is registered on the tcu soo it should be consistent
     createdAt: {
         type: Date,

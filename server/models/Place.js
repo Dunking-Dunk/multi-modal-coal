@@ -34,6 +34,10 @@ const placeSchema = mongoose.Schema({
         type: String,
         required: [true, "Please enter the address"],
     },
+    state: {
+        type: String,
+        required: [true, "Please enter the State"],
+    },
     placeId: {
         type: String,
     },

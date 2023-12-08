@@ -6,7 +6,7 @@ import { getPlace } from "../../store/reducer/PlaceReducer";
 import CardOverview from "../../components/OverviewCard";
 import { Card } from '@/components/ui/Card'
 
-import Map from '../../components/map/Map'
+import PlaceView from "../../components/map/PlaceView";
 
 const ViewPlace = () => {
     const { id } = useParams()
@@ -23,7 +23,7 @@ const ViewPlace = () => {
             <div className="flex flex-col space-y-4 mt-10 ">
                 <div className="flex flex-row gap-x-4 w-full h-[600px]">
                     <div className="w-4/5 h-full">
-                        <Map />
+                        <PlaceView places={[place]} place={true} />
                     </div>
                     <div className="flex flex-col w-1/4 gap-y-2 h-full">
 
