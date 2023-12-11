@@ -6,7 +6,6 @@ import { MarkerF } from '@react-google-maps/api';
 import Map from './Map'
 
 const MapMarker = ({ getAddress, setCoords, coords }) => {
-
     const [input, setInput] = useState('')
 
     useEffect(() => {
@@ -63,9 +62,9 @@ const MapMarker = ({ getAddress, setCoords, coords }) => {
                 <MarkerF position={coords} />
             </Map>
             <div className="absolute top-20 left-5">
-                <p className="text-secondary">Type address</p>
+                <p className="text-primary">Type address</p>
                 <div className="flex space-x-2">
-                    <Input className='text-secondary' onChange={(e) => setInput(e.target.value)} value={input} />
+                    <Input className='text-primary' onChange={(e) => setInput(e.target.value)} value={input} />
                     <Button onClick={handleInput}>Search</Button>
                 </div>
             </div>

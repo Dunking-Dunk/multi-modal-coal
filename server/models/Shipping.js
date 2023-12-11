@@ -1,14 +1,16 @@
 import mongoose from 'mongoose';
 
 const PointSchema = {
-    type: {
-        type: String,
-        enum: ['Point'],
-        required: true
-    },
-    coordinate: {
-        type: [Number],
-        required: true
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+        },
+        coordinate: {
+            type: [Number],
+            required: true
+        }
     },
     place: {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,15 +26,29 @@ const subShippingSchema = mongoose.Schema({
         ref: 'Vehicle',
         required: [true, 'Vehicle is required']
     }],
-    numberOfVehicle: {
-        type: Number,
-        required: [true, 'Number of Vehicle is required'],
-    },
-    startTime: {
+    startDate: {
         type: Date
     },
     eta: {
         type: Date
+    },
+    direction: {
+        polyline: [{
+            type: [Number],
+        }],
+        distanceAndDuration: [
+            {
+                distance: Number,
+                duration: Number
+            }
+        ],
+    },
+    dispatch: {
+        type: Boolean,
+    },
+    railRoute: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Railroute'
     }
 })
 
@@ -48,7 +64,7 @@ const shippingSchema = mongoose.Schema({
         ref: 'SubShipping'
     }
     ],
-    startTime: {
+    startDate: {
         type: Date
     },
     eta: {
@@ -62,6 +78,4 @@ const shippingSchema = mongoose.Schema({
 
 
 export const SubShipping = mongoose.Schema('SubShipping', subShippingSchema)
-const Shipping = mongoose.model('Shipping', shippingSchema)
-
-export default Shipping
+export const Shipping = mongoose.model('Shipping', shippingSchema)

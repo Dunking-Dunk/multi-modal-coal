@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux";
 
 import Dashboard from "./Dashboard";
 import Truck from "./Truck";
@@ -9,10 +10,29 @@ import Ship from "./Ship";
 import CreateVehicle from "./CreateVehicle";
 import UpdateVehicle from './UpdateVehicle'
 import ViewVehicle from "./View";
+import socket from "../../api/socket";
+import { getAllVehicle } from '../../store/reducer/VehicleReducer';
+
 
 const Vehicle = () => {
+    const dispatch = useDispatch()
+    const { vehicles } = useSelector((state) => state.Vehicle)
+
+    useEffect(() => {
+        dispatch(getAllVehicle())
+    }, [])
+
+    useEffect(() => {
+        if (vehicles) {
+            socket.getAllVehiclesLocations("allVehicles")
+            return () => {
+                socket.stopAllVehicleLocations("allVehicles")
+            }
+        }
+    }, [vehicles])
+
     return (
-        <>
+        <div className="pb-10">
             <VehicleHeader />
             <Routes>
                 <Route element={<Dashboard />} path='/' />
@@ -20,10 +40,10 @@ const Vehicle = () => {
                 <Route element={<CreateVehicle />} path='/create' />
                 <Route element={<UpdateVehicle />} path='/update/:id' />
                 <Route element={<Truck />} path='/truck' />
-                <Route element={<Train />} path='/wagon' />
+                <Route element={<Train />} path='/train' />
                 <Route element={<Ship />} path='/ship' />
             </Routes>
-        </>
+        </div>
 
     )
 }

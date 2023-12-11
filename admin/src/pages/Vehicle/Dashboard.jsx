@@ -4,27 +4,17 @@ import { useSelector } from 'react-redux'
 import DataTable from "../../components/DataTable";
 import { VehicleColumn } from "../../lib/columns";
 import CardOverview from "../../components/OverviewCard";
-import socket from "../../api/socket";
 import AllVehicleView from "../../components/map/allVehicles";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
     const { vehicles } = useSelector((state) => state.Vehicle)
-    const [trackers, setTrackers] = useState(null)
-
-    useEffect(() => {
-        if (vehicles) {
-            socket.getAllVehiclesLocations("allVehicles", setTrackers)
-            return () => {
-                socket.stopAllVehicleLocations("allVehicles")
-            }
-        }
-    }, [])
 
     return (
         <div className="flex flex-col gap-y-4 w-full h-full">
             <h3 className="font-bold text-4xl">Dashboard</h3>
             <div className=" w-full h-[600px]">
-                <AllVehicleView allVehicles={vehicles} trackers={trackers} />
+                <AllVehicleView type='all' />
             </div>
             <div className="flex flex-row space-x-2">
                 <CardOverview title='Vehicles' description='Total Number of Vehicles' value={vehicles.length} />

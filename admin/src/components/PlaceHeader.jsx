@@ -23,15 +23,21 @@ const PlaceHeader = () => {
                             Mines
                         </NavigationLink>
                     </NavigationMenuItem>
-                    <NavigationMenuItem className='px-10'>
+                    {/* <NavigationMenuItem className='px-10'>
                         <NavigationLink href='/place/inventory' className='text-xl'>
                             Inventories
                         </NavigationLink>
-                    </NavigationMenuItem>
+                    </NavigationMenuItem> */}
                     <NavigationMenuItem className='px-10'>
-                        <NavigationLink href='/place/railyard' className='text-xl'>
-                            Railyards
+                        <NavigationLink href='/place/railyard'>
+                            <NavigationMenuTrigger className='text-inherit text-xl' > Railyards</NavigationMenuTrigger>
                         </NavigationLink>
+                        <NavigationMenuContent >
+                            <div className="flex flex-col space-y-2 p-4 w-[300px]">
+                                <NavigationLink href={'railyard'}>All Railyard</NavigationLink>
+                                <NavigationLink href={'route'} >Create Rail Route</NavigationLink>
+                            </div>
+                        </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem className='px-10'>
                         <NavigationLink href='/place/port' className='text-xl'>

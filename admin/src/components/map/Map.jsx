@@ -22,7 +22,7 @@ const MapView = (props) => {
     }
 
     return (
-        <div className="w-full h-full rounded-md overflow-hidden">
+        <div className="w-full h-full rounded-md overflow-hidden" style={props.style}>
             <GoogleMap
                 zoom={7}
                 mapContainerStyle={{ width: '100%', height: '100%' }}

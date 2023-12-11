@@ -33,19 +33,19 @@ const VehicleHeader = () => {
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem className='px-10'>
-                        <NavigationLink href='wagon' className='text-xl'>
-                            <NavigationMenuTrigger className='text-xl'>Wagon</NavigationMenuTrigger>
+                        <NavigationLink href='train' className='text-xl'>
+                            <NavigationMenuTrigger className='text-xl text-inherit'>Train</NavigationMenuTrigger>
                         </NavigationLink>
                         <NavigationMenuContent >
                             <div className="flex flex-col space-y-2 p-4 w-[300px]">
-                                <NavigationLink href={'wagon'} >View All Wagons</NavigationLink>
-                                <NavigationLink href={'wagon?manage=true'}>Manage</NavigationLink>
+                                <NavigationLink href={'train'} >View All Trains</NavigationLink>
+                                <NavigationLink href={'train?manage=true'}>Manage</NavigationLink>
                             </div>
                         </NavigationMenuContent>
                     </NavigationMenuItem>
                     <NavigationMenuItem className='px-10'>
                         <NavigationLink href='ship' className='text-xl'>
-                            <NavigationMenuTrigger className='text-xl'>Ship</NavigationMenuTrigger>
+                            <NavigationMenuTrigger className='text-xl text-inherit'>Ship</NavigationMenuTrigger>
                         </NavigationLink>
                         <NavigationMenuContent >
                             <div className="flex flex-col space-y-2 p-4 w-[300px]">

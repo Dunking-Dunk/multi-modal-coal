@@ -1,6 +1,8 @@
 import express from 'express'
 import { authenticatedUser } from '../middleware/Auth.js'
+
 import Place from '../models/Place.js'
+import User from '../models/User.js'
 
 const router = express.Router()
 
@@ -24,6 +26,10 @@ router.get('/', authenticatedUser,async (req, res) => {
 
 router.post('/',authenticatedUser, async (req, res) => {
     const place = await Place.create(req.body)
+
+    if (place.supervisor) {
+        await User.findByIdAndUpdate(place.supervisor, { supervisor: place._id  })
+    }
 
     res.status(200).json({
         success: true,
@@ -50,6 +56,10 @@ router.put('/:id', authenticatedUser,async (req, res) => {
     const place = await Place.findByIdAndUpdate(id, {
         ...req.body
     })
+
+    if (place.supervisor) {
+        await User.findByIdAndUpdate(place.supervisor, { supervisor: place._id  })
+    }
 
     res.status(200).json({
         success: true,

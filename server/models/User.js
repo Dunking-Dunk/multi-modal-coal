@@ -26,7 +26,15 @@ const userSchema = mongoose.Schema({
           type: String,
           enum: ['admin', 'supervisor','driver'],
         default: "admin",
-      },
+  },
+  vehicle: { 
+      type: mongoose.Schema.Types.ObjectId,
+     ref: 'Vehicle'
+  },
+  supervisor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Place'
+  },
       age:  {
         type: Number,
         required: [true, "Please Enter Your Age"],
@@ -50,6 +58,12 @@ const userSchema = mongoose.Schema({
         default: Date.now,
     }
 })
+
+userSchema.pre('remove', function(next) {
+  // Remove all the assignment docs that reference the removed person.
+  this.model('Vehicle').remove({ driver: this._id }, next);
+  this.model('Place').remove({ supervisor: this._id }, next);
+});
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {

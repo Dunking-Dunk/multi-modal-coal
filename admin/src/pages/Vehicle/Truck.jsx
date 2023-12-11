@@ -8,22 +8,11 @@ import DataTable from "../../components/DataTable";
 import { VehicleColumn } from "../../lib/columns";
 import { useLocation } from "react-router-dom";
 import CardOverview from '../../components/OverviewCard'
-import socket from "../../api/socket";
 
 const Truck = () => {
     const { search } = useLocation()
     const manage = new URLSearchParams(search).get('manage')
     const { trucks } = useSelector((state) => state.Vehicle)
-    const [trackers, setTrackers] = useState(null)
-
-    useEffect(() => {
-        if (trucks) {
-            socket.getAllVehiclesLocations("truck", setTrackers)
-            return () => {
-                socket.stopAllVehicleLocations("truck")
-            }
-        }
-    }, [])
 
     if (manage) {
         return (
@@ -46,7 +35,7 @@ const Truck = () => {
             <h1 className="text-4xl font-bold">Trucks</h1>
             <div className="flex flex-row space-x-4">
                 <div className="w-5/6 h-[600px]">
-                    <AllVehiclesView allVehicles={trucks} trackers={trackers} />
+                    <AllVehiclesView type={'truck'} />
                 </div>
                 <div className="flex flex-col space-y-4 w-1/6">
                     <CardOverview title='Total' description='Total Number of Trucks' value={trucks.length} />

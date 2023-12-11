@@ -32,7 +32,6 @@ const PlaceForm = ({ update }) => {
     const [address, setAddress] = useState({})
     const { loading } = useSelector((state) => state.Vehicle)
     const { supervisors } = useSelector((state) => state.User)
-    const supervisorsModified = supervisors.map((supervisor) => ({ label: supervisor.name, value: supervisor._id }))
 
     useEffect(() => {
         if (update) {
@@ -68,7 +67,10 @@ const PlaceForm = ({ update }) => {
         state: z.string().min(2, {
             message: "State must be at least 2 characters.",
         }),
-        supervisor: z.string()
+        supervisor: z
+            .string()
+            .optional()
+            .or(z.literal(''))
     });
 
     const form = useForm({
@@ -92,7 +94,8 @@ const PlaceForm = ({ update }) => {
                     location: {
                         type: 'Point',
                         coordinate: [coords.lng, coords.lat]
-                    }
+                    },
+                    supervisor: data.supervisor.length > 0 ? data.supervisor : null
                 }, id: update
             })).then((state) => {
 
@@ -113,6 +116,7 @@ const PlaceForm = ({ update }) => {
         } else {
             dispatch(createPlace({
                 ...data,
+                supervisor: data.supervisor.length > 0 ? data.supervisor : null,
                 placeId: address.placeId,
                 location: {
                     type: 'Point',
@@ -222,7 +226,7 @@ const PlaceForm = ({ update }) => {
                             <FormItem className="space-x-4 w-3/6">
                                 <FormLabel>Supervisor</FormLabel>
                                 <FormControl>
-                                    <Combobox list={supervisorsModified} title='supervisor' onChange={field.onChange} defaultValue={field.value} />
+                                    <Combobox list={supervisors} title='supervisor' onChange={field.onChange} defaultValue={field.value} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

@@ -20,15 +20,25 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { useToast } from "@/components/ui/use-toast"
+import { Combobox } from './ComboBox'
 import Loader from './Loader'
 
 import { createVehicle, getVehicle, updateVehicle } from '../store/reducer/VehicleReducer'
-
+import axios from '../api/axios'
 
 const VehicleForm = ({ update }) => {
     const dispatch = useDispatch()
     const { toast } = useToast()
     const { loading } = useSelector((state) => state.Vehicle)
+    const [drivers, setDrivers] = useState([])
+
+    useEffect(() => {
+        const helper = async () => {
+            let { data } = await axios.get('/users/assigndriver')
+            setDrivers(data.drivers)
+        }
+        helper()
+    }, [])
 
     useEffect(() => {
         if (update) {
@@ -42,7 +52,8 @@ const VehicleForm = ({ update }) => {
                     capacity: vehicle.capacity,
                     type: vehicle.type,
                     status: vehicle.status,
-                    trackerId: vehicle.trackerId
+                    trackerId: vehicle.trackerId,
+                    driver: vehicle.driver
                 })
             })
         }
@@ -66,7 +77,11 @@ const VehicleForm = ({ update }) => {
         status: z.boolean().default(false),
         trackerId: z.string().min(2, {
             message: "Vehicle Make must be at least 2 characters.",
-        })
+        }),
+        driver: z
+            .string()
+            .optional()
+            .or(z.literal(''))
     })
 
     const form = useForm(
@@ -79,14 +94,15 @@ const VehicleForm = ({ update }) => {
                 capacity: 0,
                 type: '',
                 status: false,
-                trackerId: ''
+                trackerId: '',
+                driver: ''
             }
         }
     )
 
     const onSubmit = async (data) => {
         if (update) {
-            dispatch(updateVehicle({ data, id: update })).then((state) => {
+            dispatch(updateVehicle({ data: { ...data, driver: data.driver.length > 0 ? data.driver : null }, id: update })).then((state) => {
 
                 if (!state.error) {
                     form.reset()
@@ -103,7 +119,7 @@ const VehicleForm = ({ update }) => {
                 }
             })
         } else {
-            dispatch(createVehicle(data)).then((state) => {
+            dispatch(createVehicle({ ...data, driver: data.driver.length > 0 ? data.driver : null })).then((state) => {
                 if (!state.error) {
                     form.reset()
                     toast({
@@ -235,6 +251,24 @@ const VehicleForm = ({ update }) => {
                         </FormItem>
                     )}
                 />
+                <div>
+                    <FormLabel>Driver can also be assigned later</FormLabel>
+                    <FormField
+                        control={form.control}
+                        name="driver"
+                        render={({ field }) => (
+                            <FormItem className="space-x-4 w-3/6">
+                                <FormLabel>Driver</FormLabel>
+                                <FormControl>
+                                    <Combobox list={drivers} title='driver' onChange={field.onChange} defaultValue={field.value} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
+
+
                 <div className='space-y-4'>
                     <FormDescription>Enter the Tracker ID associated with the iot module</FormDescription>
                     <FormField

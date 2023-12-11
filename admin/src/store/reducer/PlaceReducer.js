@@ -61,6 +61,30 @@ export const deletePlace = createAsyncThunk('places/deletePlace', async (body, t
     }
 });
 
+export const createRailroute = createAsyncThunk('places/createRailroute', async (body, thunkAPI) => {
+    try {
+        const place = await api.post('/route/rail', body);
+        const data = place.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({ error: err.response.data });
+        }
+    }
+});
+
+export const getAllRailroute = createAsyncThunk('places/getAllRailroute', async (body, thunkAPI) => {
+    try {
+        const place = await api.get('/route/rail');
+        const data = place.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({ error: err.response.data });
+        }
+    }
+});
+
 const PlaceReducer = createSlice({
     name: 'place',
     initialState: {
@@ -68,6 +92,7 @@ const PlaceReducer = createSlice({
         mines: [],
         inventory: [],
         railyard: [],
+        railroute: [],
         port: [],
         place: null,
         loading: false
@@ -131,6 +156,26 @@ const PlaceReducer = createSlice({
             state[action.payload.place.type][state[action.payload.place.type].findIndex((place) => place._id === action.payload.place._id )] = action.payload.place
         });
         builder.addCase(updatePlace.rejected, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(createRailroute.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(createRailroute.fulfilled, (state, action) => {
+            state.railroute.push(action.payload.railroute);
+            state.loading = false;
+        });
+        builder.addCase(createRailroute.rejected, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(getAllRailroute.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(getAllRailroute.fulfilled, (state, action) => {
+            state.railroute = action.payload.railroutes;
+            state.loading = false;
+        });
+        builder.addCase(getAllRailroute.rejected, (state, action) => {
             state.loading = false;
         });
     }

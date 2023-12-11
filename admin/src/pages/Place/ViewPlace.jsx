@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Loader from "../../components/Loader";
 import { getPlace } from "../../store/reducer/PlaceReducer";
 import CardOverview from "../../components/OverviewCard";
@@ -11,6 +11,7 @@ import PlaceView from "../../components/map/PlaceView";
 const ViewPlace = () => {
     const { id } = useParams()
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const { place } = useSelector((state) => state.Place)
 
@@ -35,12 +36,29 @@ const ViewPlace = () => {
                         <CardOverview title='Type' description={"Place Type"} value={place.type.toUpperCase()} />
                         <CardOverview title='Name' description={"Place Name"} value={place.name} />
                         <CardOverview title='Coal Stored' description={"Coal Stored (in tons)"} value={place.coalStored} />
-                        <CardOverview title='Supervisor' description={"Place supervisor"} value={place.supervisor.name} />
                     </div>
-                    <Card className='p-4'>
-                        <h5 className="font-bold text-2xl">Place Address</h5>
-                        <p>{place.address}</p>
-                    </Card>
+                    <div className="flex flex-row space-x-2">
+                        <Card className='p-4 w-full'>
+                            <h5 className="font-bold text-2xl">Place Address</h5>
+                            <p>{place.state}</p>
+                            <p>{place.address}</p>
+                        </Card>
+                        {place.supervisor && (
+                            <Card className='p-4 w-full cursor-pointer flex flex-row space-x-4 items-center' onClick={() => {
+                                navigate(`/user/${place.supervisor._id}`)
+                            }}>
+                                <div className="w-[100px] h-[100px] rounded-full overflow-hidden">
+                                    <img src={place.supervisor.image.url} />
+                                </div>
+                                <div>
+                                    <h5 className="font-bold text-2xl">Supervisor</h5>
+                                    <p>{place.supervisor.name}</p>
+                                    <p>{place.supervisor.contact}</p>
+                                </div>
+                            </Card>
+                        )}
+                    </div>
+
                 </div>
             </div>
         )

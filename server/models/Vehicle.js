@@ -20,16 +20,16 @@ const vehicleSchema = mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['truck', 'wagon', 'ship'],
+        enum: ['truck', 'train', 'ship'],
         required: [true, 'Vehicle Mode Number Required'],
     },
     status: {
         type: Boolean
     },
-    shipping: {
+    shipment: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Shipping'
-    },
+    }],
     shippingStatus: {
         type: Boolean
     },
@@ -72,6 +72,11 @@ const vehicleSchema = mongoose.Schema({
         default: Date.now,
     },
 })
+
+vehicleSchema.pre('remove', function(next) {
+    // Remove all the assignment docs that reference the removed person.
+    this.model('User').remove({ vehicle: this._id }, next);
+  });
 
 const Vehicle = mongoose.model('Vehicle', vehicleSchema)
 

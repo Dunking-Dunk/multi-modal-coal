@@ -40,13 +40,12 @@ export const connection = () => {
     changeStreamVehicle.on('change',async (data) => {
         const fullDocument = data.fullDocument
         if (data.operationType === 'update') {
-            const Vehicles = await Vehicle.find({})
-            io.to('allVehicles').emit('getAllVehicleLocation', Vehicles)
-            if (fullDocument.type) {
-                const typeVehicles = await Vehicle.find({ type: fullDocument.type })
+            io.to('allVehicles').emit('getAllVehicleLocation', fullDocument)
+            // if (fullDocument.type) {
+            //     const typeVehicles = await Vehicle.find({ type: fullDocument.type })
              
-                io.to(fullDocument.type).emit('getAllVehicleLocation',typeVehicles)
-            }
+            //     io.to(fullDocument.type).emit('getAllVehicleLocation',typeVehicles)
+            // }
         }
     })
     // changeStreamStop.on('change', (data: any) => {

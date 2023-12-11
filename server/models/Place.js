@@ -48,8 +48,23 @@ const placeSchema = mongoose.Schema({
     supervisor: {
          type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    railroute: [{
+        type: mongoose.Schema.Types.ObjectId,
+       ref: 'Railroute'
+    }],
+    shipments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Shipping'
+        }
+    ]
 })
+
+placeSchema.pre('remove', function(next) {
+    // Remove all the assignment docs that reference the removed person.
+    this.model('User').remove({ supervisor: this._id }, next);
+  });
 
 const Place = mongoose.model('Place', placeSchema)
 

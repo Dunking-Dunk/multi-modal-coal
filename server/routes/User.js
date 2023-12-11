@@ -22,8 +22,60 @@ router.post("/register", async (req, res) => {
     });
   
     sendToken(user, 201, res);
-  });
+});
   
+router.post('/create', authenticatedUser, async (req, res, next) => {
+  const { name, password, email, role, age, contact, image } = req.body;
+  
+  const existing = await User.findOne({ email: email })
+ 
+  if (existing) {
+    return next(new Error('User already exist with the mail', 400))
+  }
+  
+  const result = await cloudinary.v2.uploader.upload(image, {
+    folder: "multi-modal-coal-users",
+  });
+
+  
+  const user = await User.create({
+    name,
+    password,
+    email,
+    age,
+    role,
+    contact,
+    image: {
+      public_id: result.public_id,
+      url: result.secure_url
+    }
+  })
+
+  res.status(200).json({
+    success: true,
+    user
+  })
+})
+
+
+  router.get('/assigndriver', async(req, res) => {
+
+    const drivers = await User.find({role: 'driver', vehicle: null})
+    res.status(200).json({
+      success: true,
+      drivers
+    })
+  })
+  router.get('/assignsupervisor', async(req, res) => {
+
+    const supervisor = await User.find({role: 'supervisor', supervisor: null})
+    res.status(200).json({
+      success: true,
+      supervisor
+    })
+  })
+  
+
   router.post("/login", async (req, res, next) => {
     const { password, email } = req.body;
   
@@ -74,7 +126,7 @@ router.get('/', authenticatedUser, async (req, res) => {
 })
 
 router.get('/:id', authenticatedUser, async (req, res) => { 
-  const user = await User.findById(req.params.id)
+  const user = await User.findById(req.params.id).populate('vehicle').populate('supervisor')
 
   res.status(200).json({
     success: true,
@@ -91,7 +143,6 @@ router.put('/:id', authenticatedUser, async (req, res,next) => {
   if (!existingUser) {
     return next(new Error("User doesn't exist", 400))
   }
-  console.log(existingUser.image)
   if (existingUser.image.public_id) {
     await cloudinary.v2.uploader.destroy(existingUser.image.public_id)
   }
@@ -131,39 +182,6 @@ router.delete('/:id', authenticatedUser, async (req, res) => {
   })
 })
 
-router.post('/create', authenticatedUser, async (req, res, next) => {
-  const { name, password, email, role, age, contact, image } = req.body;
-  
-  const existing = await User.findOne({ email: email })
- 
-  if (existing) {
-    return next(new Error('User already exist with the mail', 400))
-  }
-  
-  const result = await cloudinary.v2.uploader.upload(image, {
-    folder: "multi-modal-coal-users",
-  });
-
-  
-  const user = await User.create({
-    name,
-    password,
-    email,
-    age,
-    role,
-    contact,
-    image: {
-      public_id: result.public_id,
-      url: result.secure_url
-    }
-  })
-
-  res.status(201).json({
-    success: true,
-    user
-  })
-})
 
 
-  
 export default router

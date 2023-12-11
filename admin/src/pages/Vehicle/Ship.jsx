@@ -8,23 +8,11 @@ import DataTable from "../../components/DataTable";
 import { VehicleColumn } from "../../lib/columns";
 import CardOverview from '../../components/OverviewCard'
 import AllVehiclesView from "../../components/map/allVehicles";
-import socket from '../../api/socket'
 
 const Ship = () => {
     const { search } = useLocation()
     const manage = new URLSearchParams(search).get('manage')
     const { ships } = useSelector((state) => state.Vehicle)
-
-    const [trackers, setTrackers] = useState(null)
-
-    useEffect(() => {
-        if (ships) {
-            socket.getAllVehiclesLocations("ship", setTrackers)
-            return () => {
-                socket.stopAllVehicleLocations("ship")
-            }
-        }
-    }, [])
 
     if (manage) {
         return (
@@ -47,7 +35,7 @@ const Ship = () => {
             <h1 className="text-4xl font-bold">Ships</h1>
             <div className="flex flex-row space-x-4">
                 <div className="w-5/6 h-[600px]">
-                    <AllVehiclesView trackers={trackers} allVehicles={ships} />
+                    <AllVehiclesView type={'ship'} />
                 </div>
                 <div className="flex flex-col space-y-4 w-1/6">
                     <CardOverview title='Total' description='Total Number of Ships' value={ships.length} />

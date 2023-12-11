@@ -1,4 +1,7 @@
 import { io } from "socket.io-client";
+import store from '../store/reducer/store'
+
+import {setTracker} from '../store/reducer/VehicleReducer'
 
 class Socket {
     constructor() {
@@ -22,10 +25,10 @@ class Socket {
      
     }
 
-    getAllVehiclesLocations(room,setTrackers) {
+    getAllVehiclesLocations(room) {
         this.socket.emit("join-room", room)
-          this.socket?.on("getAllVehicleLocation", (data) => {
-            setTrackers(data)
+        this.socket?.on("getAllVehicleLocation", (data) => {
+            store.dispatch(setTracker(data))
         });
     }
 
@@ -46,8 +49,6 @@ class Socket {
 
 
   
-
-
 
     //   getUpdatedStop() {
     //     this.socket.on("updateStop", (data) => {

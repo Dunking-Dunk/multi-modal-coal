@@ -11,8 +11,12 @@ import Mines from "./Mines";
 import Inventory from "./Inventory";
 import Railyard from "./Railyard";
 import Port from "./Port";
+import CreateRoute from "./CreateRoute";
+import { getAllRailroute } from "../../store/reducer/PlaceReducer";
+
 
 const Place = () => {
+
     return (
         <>
             <PlaceHeader />
@@ -24,6 +28,7 @@ const Place = () => {
                 <Route element={<Inventory />} path='/inventory' />
                 <Route element={<Railyard />} path='/railyard' />
                 <Route element={<Port />} path='/port' />
+                <Route element={<CreateRoute />} path="/route" />
                 <Route element={<UpdatePlace />} path='/update/:id' />
             </Routes>
         </>

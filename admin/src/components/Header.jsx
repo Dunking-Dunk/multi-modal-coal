@@ -38,10 +38,10 @@ export default function Header({ props }) {
                     {...props}
                 >
                     <NavigationLink href="/">Dashboard</NavigationLink>
+                    <NavigationLink href='/shipping'>Shipment</NavigationLink>
                     <NavigationLink href="/vehicle">Vehicle</NavigationLink>
                     <NavigationLink href="/user">User</NavigationLink>
                     <NavigationLink href='/place'>Place</NavigationLink>
-                    <NavigationLink href='/shipping'>Shipping</NavigationLink>
                     {/* <NavigationLink href='/announcement'>Announcement</NavigationLink>
                     <NavigationLink href='/notification'>Notifications</NavigationLink> */}
                 </nav>

@@ -68,12 +68,15 @@ const VehicleReducer = createSlice({
     initialState: {
         vehicles: [],
         trucks: [],
-        wagons: [], 
+        trains: [], 
         ships: [],
         vehicle: null,
         loading: false
     },
     reducers: {
+        setTracker: (state,action) => {
+            state.vehicles[state.vehicles.findIndex((track) => track._id === action.payload._id)] = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getAllVehicle.pending, (state, action) => {
@@ -81,7 +84,7 @@ const VehicleReducer = createSlice({
         })
         builder.addCase(getAllVehicle.fulfilled, (state, action) => {
             state.vehicles = action.payload.vehicles
-            state.wagons = action.payload.vehicles.filter((vehicle) => vehicle.type === 'wagon')
+            state.trains = action.payload.vehicles.filter((vehicle) => vehicle.type === 'wagon')
             state.trucks = action.payload.vehicles.filter((vehicle) => vehicle.type === 'truck')
             state.ships = action.payload.vehicles.filter((vehicle) => vehicle.type === 'ship')
             state.loading = false
@@ -117,7 +120,7 @@ const VehicleReducer = createSlice({
             state.vehicles = state.vehicles.filter((vehicle) => vehicle._id !== action.payload)
             state.trucks = state.trucks.filter((vehicle) => vehicle._id !== action.payload)
             state.ships = state.ships.filter((vehicle) => vehicle._id !== action.payload)
-            state.wagons = state.wagons.filter((vehicle) => vehicle._id !== action.payload)
+            state.trains = state.trains.filter((vehicle) => vehicle._id !== action.payload)
             state.loading = false
         })
         builder.addCase(deleteVehicle.rejected, (state, action) => {
@@ -136,5 +139,7 @@ const VehicleReducer = createSlice({
         })
     }
 })
+
+export const { setTracker } = VehicleReducer.actions
 
 export default VehicleReducer.reducer
