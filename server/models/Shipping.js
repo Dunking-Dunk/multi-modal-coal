@@ -97,11 +97,6 @@ const shippingSchema = new mongoose.Schema({
     },
 })
 
-subShippingSchema.pre('remove',async function(next) {
-    // Remove all the assignment docs that reference the removed person.
-    await Vehicle.update({}, { $pull: { shipments: { $in: this._id } } }, { multi: true });
-    await Place.update({}, { $pull: { shipments: { $in: this._id } } }, { multi: true });
-  });
 
 
 

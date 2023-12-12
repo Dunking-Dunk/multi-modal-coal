@@ -2,8 +2,10 @@ import * as React from 'react'
 import { Progress } from "@/components/ui/progress"
 
 import PlaceCard from "@/components/PlaceCard";
+import { getDistanceAndTime } from '@/lib/getDistanceAndTime'
 
-function StepperComp({ origin, destination, status }) {
+function StepperComp({ origin, destination, status, distanceAndDuration }) {
+    const [distance, time] = getDistanceAndTime(distanceAndDuration)
 
     return (
         <div className='flex flex-col justify-between relative my-5 '>
@@ -14,6 +16,8 @@ function StepperComp({ origin, destination, status }) {
                 </div>
                 <div className='w-[100%] text-center'>
                     <h1>To</h1>
+                    <p>{distance}</p>
+                    <p>{time}</p>
                     <Progress value={status === 'completed' ? 100 : 10} className="w-[100%] -z-10 " />
                 </div>
                 <div className="space-y-2">

@@ -50,11 +50,13 @@ router.post('/', async (req, res) => {
          subShipping.push(s._id)
     }
 
-    shipment.subShipping = subShipping
-
+     await Shipping.findOneAndUpdate({ _id: shipment._id }, {
+        subShipping: subShipping
+    })
+    const finalShipment = await Shipping.findById(shipment._id)
     res.status(200).json({
         success: true,
-        shipment
+        finalShipment
     })
 })
 
@@ -90,6 +92,12 @@ router.delete('/:id', async (req, res) => {
     const shipping = await Shipping.findById(id)
   
     for (const shipment of shipping.subShipping) { 
+        const sub = await SubShipping.findById(shipment)
+        await Place.findByIdAndUpdate(sub.origin.place, { $pull: sub._id })
+        await Place.findByIdAndUpdate(sub.destination.place, { $pull: {shipments: sub._id } })
+        for (const vehicle of sub.vehicles) { 
+            await Vehicle.findByIdAndUpdate(vehicle, { $pull: {shipments: sub._id } })
+        } 
         await SubShipping.findByIdAndDelete(shipment)
     }
     

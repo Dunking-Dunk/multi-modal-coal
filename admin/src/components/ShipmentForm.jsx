@@ -84,6 +84,9 @@ const ShipmentForm = ({ update }) => {
                         title: 'Created Shipment',
                         description: 'Successfully created Shipment'
                     })
+                    form.reset()
+                    setSubShipment([])
+                    setNumSub([])
                 } else {
                     toast({
                         title: 'Error',
@@ -154,15 +157,16 @@ const ShipmentForm = ({ update }) => {
                         </FormItem>
                     )}
                 />
-                <div className='py-4'>
+                <div className='py-2'>
                     {numSub.map((_, index) => {
                         return <ShipmentFormMap key={index} index={index} setSubShipment={setSubShipment} subShipment={subShipment} />
                     })}
                     <div className='flex flex-row justify-between'>
                         <Button onClick={(e) => {
                             e.preventDefault();
+
                             setNumSub((state) => ([...state, {}]))
-                        }}>Add Sub - Shipment</Button>
+                        }} disabled={!(subShipment.length >= numSub.length || numSub.length === 0)}>Add Sub - Shipment</Button>
                         <Button onClick={(e) => {
                             e.preventDefault();
                             setNumSub((state) => ([...state.slice(0, state.length - 1)]))

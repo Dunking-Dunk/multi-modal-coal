@@ -10,7 +10,7 @@ const Manage = () => {
     return (
         <div>
             <h1 className="text-4xl font-bold mb-8">All Shipments</h1>
-            <Table columns={ShippingColumn} data={shipments} />
+            {shipments && <Table columns={ShippingColumn} data={shipments} />}
         </div>
     )
 }

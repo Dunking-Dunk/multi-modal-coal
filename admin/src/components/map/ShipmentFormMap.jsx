@@ -1,57 +1,74 @@
-import React, { useEffect, useState } from "react";
-import { MarkerF, OverlayViewF, OverlayView, Polyline } from '@react-google-maps/api'
+import React, { useEffect, useState, useRef } from "react";
+import { Polyline } from '@react-google-maps/api'
 import { useSelector } from "react-redux";
+import polyline from '@mapbox/polyline'
 
 import Map from "./Map";
 import Table from '../DataTable'
 import { shippingVehicleFormColumn } from "../../lib/columns";
 import { Button } from '@/components/ui/button'
+import { getDistanceAndTime } from "../../lib/getDistanceAndTime";
+import PlaceMarkers from "./PlaceMarker";
 
 const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
     const { places, railroute, mines, railyard, port } = useSelector((state) => state.Place)
+    const DirectionRef = useRef()
     const { vehicles } = useSelector((state) => state.Vehicle)
     const [shipment, setShipment] = useState([])
     const [shipmentVehicles, setShipmentVehicles] = useState([])
     const [submitted, setSubmitted] = useState(false)
+    const [directions, setDirections] = useState({ polyline: [], distanceAndDuration: [] })
+    const [routes, setRoutes] = useState([])
 
-    function getPixelPositionOffset(width, height) {
-        return { x: -(width / 2), y: -(height / 2) };
-    }
+    useEffect(() => {
+        if (railroute)
+            setRoutes(railroute)
+    }, [railroute])
 
-    const handleClick = (e) => {
-        console.log(e)
-    }
+    useEffect(() => {
+        DirectionRef.current = new google.maps.DirectionsService()
+    }, [])
 
-    const markers = (state) => {
-        return state.map((place) => {
-            return (
-                <React.Fragment key={place._id}>
-                    <MarkerF position={{ lat: place.location.coordinate[1], lng: place.location.coordinate[0] }} onClick={() => {
-                        setShipment((state) => ([...state, place]))
-                    }} />
-                    <OverlayViewF
-                        position={{ lat: place.location.coordinate[1], lng: place.location.coordinate[0] }}
-                        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-                        getPixelPositionOffset={getPixelPositionOffset} >
+    useEffect(() => {
+        const helper = async () => {
+            if (shipment[0].type !== 'railyard' || shipment[1].type !== 'railyard')
+                try {
+                    const request = {
+                        origin: { lat: shipment[0].location.coordinate[1], lng: shipment[0].location.coordinate[0] },
+                        destination: { lat: shipment[shipment.length - 1].location.coordinate[1], lng: shipment[shipment.length - 1].location.coordinate[0] },
+                        travelMode: 'DRIVING'
+                    }
 
-                        <div className="flex flex-row space-x-4 bg-primary-foreground p-2 rounded-lg items-center absolute w-[300px] -top-12 left-6" onClick={() => {
-                            if (!place)
-                                navigate(`/place/${id}`)
-                        }}>
-                            {
-                                place.type === 'port' ? <img src="/images/Port.png" className="w-10 h-10" /> :
-                                    place.type === 'railyard' ? <img src="/images/Station.png" className="w-10 h-10" /> : <img src="/images/Factory.png" className="w-10 h-10" />
-                            }
-                            <div className="flex flex-col">
-                                <h5 className="text-lg">{place.name}</h5>
-                                <p>{place.address}</p>
-                            </div>
-                        </div>
-                    </OverlayViewF>
-                </React.Fragment>
-            )
-        })
-    }
+                    const res = await DirectionRef.current.route(request)
+                    const poly = res.routes[0].overview_polyline
+                    const poly_decode = polyline.decode(poly)
+                    const distanceAndDuration = res.routes[0].legs.map((leg) => ({
+                        distance: leg.distance.value,
+                        duration: leg.duration.value
+                    }))
+                    setDirections({ polyline: poly_decode, distanceAndDuration })
+                }
+                catch (err) {
+                    console.log(err)
+                }
+        }
+
+        const checkRailroute = () => {
+            routes.forEach((route) => {
+
+                if (route.stops.includes(shipment[0]._id) && route.stops.includes(shipment[1]._id)) {
+                    setDirections({ polyline: route.polyline, distanceAndDuration: route.distanceAndDuration })
+                }
+            })
+        }
+
+        if (shipment.length > 1) {
+            helper()
+            checkRailroute()
+        }
+
+    }, [shipment])
+
 
     const handleSubmit = () => {
         setSubShipment((state) => ([...state, {
@@ -68,9 +85,14 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
                 place: shipment[1]._id
             },
             vehicles: shipmentVehicles,
+            direction: directions
         }]))
 
         setSubmitted(true)
+    }
+
+    const handleClick = (e) => {
+
     }
 
     return (
@@ -80,10 +102,22 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
                 {shipment.length <= 1 && (
                     <div className="w-3/4 h-[700px]">
                         <Map onClick={handleClick} style={{ width: '100%', height: '100%' }}>
-                            {
-                                markers(places)
+                            <PlaceMarkers state={places} setShipment={setShipment} />
+                            {routes && (
+                                routes.map((route, index) => {
+                                    const polyLine = route.polyline.map((poly) => ({ lat: poly[0], lng: poly[1] }))
+                                    return (
+                                        <Polyline
+                                            key={index}
+                                            path={polyLine}
+                                            options={{
+                                                strokeColor: '#F94C10',
+                                                strokeOpacity: 1,
+                                                strokeWeight: 3,
+                                            }} />
+                                    )
+                                }))
                             }
-
                         </Map>
                     </div>
                 )}
@@ -94,16 +128,19 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
                                 <div className="p-6">
                                     <h5 className="text-2xl font-medium">{shipment[0].name}</h5>
                                     <p className="mb-5">{shipment[0].type}</p>
-                                    <p>{shipment[0].address}</p>
+                                    <p className="w-[300px]">{shipment[0].address}</p>
                                 </div>
 
                                 {shipment[1] && (
                                     <>
-                                        <p>To</p>
+                                        <div className=" text-center">
+                                            <p>To</p>
+                                            {directions.distanceAndDuration && <p>{getDistanceAndTime(directions.distanceAndDuration)}</p>}
+                                        </div>
                                         <div className="p-6">
                                             <h5 className="text-2xl font-medium ">{shipment[1].name}</h5>
                                             <p className="mb-5">{shipment[1].type}</p>
-                                            <p>{shipment[1].address}</p>
+                                            <p className="w-[300px]">{shipment[1].address}</p>
                                         </div>
                                     </>
                                 )}
@@ -122,7 +159,6 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
                 </div>
             </div>
             <p>To Confirm</p>
-
             <Button onClick={handleSubmit} disabled={
                 !(shipmentVehicles.length > 0 && !submitted)}>Create Sub Shippment</Button>
 
@@ -132,4 +168,7 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
     )
 }
 
+
+
 export default ShipmentFormMap
+

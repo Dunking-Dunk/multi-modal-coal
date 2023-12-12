@@ -84,7 +84,7 @@ const View = () => {
                             return (
                                 <div className="py-4" key={index}>
                                     <h4 className="text-2xl font-medium border-b-2 p-2">Sub-Shipment - {index + 1}</h4>
-                                    <StepperComp origin={shipment.origin} destination={shipment.destination} status={shipment.status} />
+                                    <StepperComp origin={shipment.origin} destination={shipment.destination} status={shipment.status} distanceAndDuration={shipment.direction.distanceAndDuration} />
                                     <h4 className="text-2xl font-medium mb-2">All Vehicles</h4>
                                     <Table columns={shippingVehicleViewColumn} data={shipment.vehicles} />
                                 </div>
