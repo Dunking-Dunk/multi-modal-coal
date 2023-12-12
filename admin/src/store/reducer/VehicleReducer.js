@@ -62,6 +62,18 @@ export const deleteVehicle = createAsyncThunk('vehicle/deleteVehicle', async (bo
     }
 })
 
+export const getVehicleShipment =  createAsyncThunk('vehicle/getVehicleShipment', async (body, thunkAPI) => {
+    try {
+        const shipments = await api.get(`/shipments/vehicle/${body}`)
+        const data = shipments.data
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
 
 const VehicleReducer = createSlice({
     name: 'vehicle',
@@ -84,7 +96,7 @@ const VehicleReducer = createSlice({
         })
         builder.addCase(getAllVehicle.fulfilled, (state, action) => {
             state.vehicles = action.payload.vehicles
-            state.trains = action.payload.vehicles.filter((vehicle) => vehicle.type === 'wagon')
+            state.trains = action.payload.vehicles.filter((vehicle) => vehicle.type === 'train')
             state.trucks = action.payload.vehicles.filter((vehicle) => vehicle.type === 'truck')
             state.ships = action.payload.vehicles.filter((vehicle) => vehicle.type === 'ship')
             state.loading = false
@@ -102,6 +114,17 @@ const VehicleReducer = createSlice({
         builder.addCase(getVehicle.rejected, (state, action) => {
             state.loading = false
         })
+        builder.addCase(getVehicleShipment.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getVehicleShipment.fulfilled, (state, action) => {
+            state.vehicle = {...state.vehicle, shipments: action.payload.shipments}
+            state.loading = false
+        })
+        builder.addCase(getVehicleShipment.rejected, (state, action) => {
+            state.loading = false
+        })
+        
         builder.addCase(createVehicle.pending, (state, action) => {
             state.loading = true
         })

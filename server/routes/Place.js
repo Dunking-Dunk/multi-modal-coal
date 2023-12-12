@@ -71,7 +71,15 @@ router.put('/:id', authenticatedUser,async (req, res) => {
 router.delete('/:id',authenticatedUser, async (req, res) => {
     const { id } = req.params
     
-     await Place.findByIdAndDelete(id)
+    const place = await Place.findById(id)
+    
+    if (place.supervisor) {
+        await User.findByIdAndUpdate(place.supervisor, {
+            $unset: {supervisor: ''}
+        })
+    }
+
+    await Place.findByIdAndDelete(id)
 
     res.status(200).json({
         success: true,

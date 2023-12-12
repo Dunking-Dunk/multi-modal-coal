@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loader from "../../components/Loader";
-import { getVehicle } from "../../store/reducer/VehicleReducer";
+import { getVehicle, getVehicleShipment } from "../../store/reducer/VehicleReducer";
 import CardOverview from "../../components/OverviewCard";
 import socket from "../../api/socket";
 import VehicleMap from "../../components/map/VehicleView";
+import Table from '../../components/DataTable'
+import { vehicleShippingColumn } from "../../lib/columns";
 
 const ViewVehicle = () => {
     const { id } = useParams()
@@ -15,8 +17,12 @@ const ViewVehicle = () => {
     const [tracker, setTracker] = useState(null)
 
     useEffect(() => {
-        dispatch(getVehicle(id))
+        dispatch(getVehicle(id)).then(() => {
+            dispatch(getVehicleShipment(id))
+        })
+
     }, [])
+    console.log(vehicle)
 
     useEffect(() => {
         if (vehicle)
@@ -68,7 +74,11 @@ const ViewVehicle = () => {
 
                     )}
                 </div>
-
+                <div className="pt-6">
+                    <h3 className="text-2xl font-semibold">Vehicle Shipment</h3>
+                    <p className="pb-8">All the assigned Shipments for the vehicle</p>
+                    {vehicle.shipments ? <Table columns={vehicleShippingColumn} data={vehicle.shipments} /> : <p className="text-3xl font-semibold mt-8">No shipment is assigned</p>}
+                </div>
             </div>
         )
     } else {

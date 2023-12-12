@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const railrouteSchema = mongoose.Schema({
+const railrouteSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true

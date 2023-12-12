@@ -71,7 +71,7 @@ const VehicleForm = ({ update }) => {
             message: "Vehicle set must be at least 3 characters."
         }),
         capacity: z.number(),
-        type: z.enum(["truck", "wagon", "ship"], {
+        type: z.enum(["truck", "train", "ship"], {
             required_error: "You need to select a notification type.",
         }),
         status: z.boolean().default(false),
@@ -190,10 +190,10 @@ const VehicleForm = ({ update }) => {
                                     </FormItem>
                                     <FormItem className="flex items-center space-x-3 space-y-0">
                                         <FormControl>
-                                            <RadioGroupItem value="wagon" />
+                                            <RadioGroupItem value="train" />
                                         </FormControl>
                                         <FormLabel className="font-normal">
-                                            Wagon
+                                            Train
                                         </FormLabel>
                                     </FormItem>
                                     <FormItem className="flex items-center space-x-3 space-y-0">

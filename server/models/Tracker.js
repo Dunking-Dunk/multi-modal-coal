@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const trackerSchema = mongoose.Schema({
+const trackerSchema = new mongoose.Schema({
     speed: {
         type: Number,
         default: 0

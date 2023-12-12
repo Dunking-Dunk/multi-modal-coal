@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
     flexRender,
@@ -20,10 +20,11 @@ import {
 } from "@/components/ui/table"
 
 
-const DataTable = ({ columns, data, filterColumn }) => {
+const DataTable = ({ columns, data, filterColumn, getSelectedRow }) => {
     const [sorting, setSorting] = React.useState([])
     const [columnFilters, setColumnFilters] = React.useState(
         [])
+    const [rowSelection, setRowSelection] = React.useState({})
 
     const table = useReactTable({
         data,
@@ -34,11 +35,21 @@ const DataTable = ({ columns, data, filterColumn }) => {
         getSortedRowModel: getSortedRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
+        onRowSelectionChange: setRowSelection,
         state: {
             sorting,
-            columnFilters
+            columnFilters,
+            rowSelection,
         },
     })
+
+    useEffect(() => {
+
+        if (getSelectedRow) {
+            const selected = table.getFilteredSelectedRowModel().rows.map(row => row.getValue('_id'))
+            getSelectedRow(selected)
+        }
+    }, [rowSelection])
 
     return (
         <div className="rounded-md border">

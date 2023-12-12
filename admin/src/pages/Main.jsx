@@ -11,6 +11,8 @@ import Shipping from './Shipping/Index'
 import { useDispatch } from 'react-redux';
 import { getAllUsers } from '../store/reducer/UserReducer';
 import { getAllPlaces, getAllRailroute } from '../store/reducer/PlaceReducer';
+import { getAllVehicle } from '../store/reducer/VehicleReducer';
+import { getAllShipments } from '../store/reducer/ShipmentReducer';
 
 const Main = () => {
     const dispatch = useDispatch()
@@ -19,6 +21,8 @@ const Main = () => {
         dispatch(getAllUsers())
         dispatch(getAllPlaces())
         dispatch(getAllRailroute())
+        dispatch(getAllVehicle())
+        dispatch(getAllShipments())
     }, [])
 
     return (

@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loader from "../../components/Loader";
-import { getPlace } from "../../store/reducer/PlaceReducer";
+import { getPlace, getPlaceShipments } from "../../store/reducer/PlaceReducer";
 import CardOverview from "../../components/OverviewCard";
 import { Card } from '@/components/ui/Card'
 
+import { placeShippingColumn } from '../../lib/columns'
 import PlaceView from "../../components/map/PlaceView";
+import Table from '@/components/DataTable'
 
 const ViewPlace = () => {
     const { id } = useParams()
@@ -16,8 +18,12 @@ const ViewPlace = () => {
     const { place } = useSelector((state) => state.Place)
 
     useEffect(() => {
-        dispatch(getPlace(id))
+        dispatch(getPlace(id)).then(() => {
+            dispatch(getPlaceShipments(id))
+        })
     }, [])
+
+    console.log(place)
 
     if (place) {
         return (
@@ -59,6 +65,15 @@ const ViewPlace = () => {
                         )}
                     </div>
 
+                </div>
+                <div className="space-y-4">
+                    <h3 className="text-3xl font-semibold">Shipments</h3>
+                    {place.shipments ? (
+                        <div>
+                            <p className="pb-6">All The Shipments that would reach here need to be transfered to another mode</p>
+                            <Table columns={placeShippingColumn} data={place.shipments} />
+                        </div>
+                    ) : <p>No Shipment is assigned to this place</p>}
                 </div>
             </div>
         )

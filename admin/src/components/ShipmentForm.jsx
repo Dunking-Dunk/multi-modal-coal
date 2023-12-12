@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import Loader from './Loader'
 import ShipmentFormMap from './map/ShipmentFormMap'
+import { createShipment } from '../store/reducer/ShipmentReducer'
 
 
 const ShipmentForm = ({ update }) => {
@@ -57,7 +58,6 @@ const ShipmentForm = ({ update }) => {
     const FormSchema = z.object({
         quantity: z.number(),
         startDate: z.date(),
-        deadline: z.date()
     })
 
     const form = useForm(
@@ -70,7 +70,29 @@ const ShipmentForm = ({ update }) => {
     )
 
     const onSubmit = (data) => {
-        console.log(data)
+        if (subShipment.length > 0) {
+            const body = {
+                ...data,
+                origin: subShipment[0].origin,
+                destination: subShipment[subShipment.length - 1].destination,
+                subShipments: subShipment
+            }
+            dispatch(createShipment(body)).then((state) => {
+
+                if (!state.error) {
+                    toast({
+                        title: 'Created Shipment',
+                        description: 'Successfully created Shipment'
+                    })
+                } else {
+                    toast({
+                        title: 'Error',
+                        description: state.payload.error.message,
+                        variant: 'destructive'
+                    })
+                }
+            })
+        }
     }
 
     return (
@@ -132,11 +154,22 @@ const ShipmentForm = ({ update }) => {
                         </FormItem>
                     )}
                 />
-                <Button onClick={() => setNumSub((state) => ([...state, {}]))}>Add Sub - Shipment</Button>
                 <div className='py-4'>
                     {numSub.map((_, index) => {
                         return <ShipmentFormMap key={index} index={index} setSubShipment={setSubShipment} subShipment={subShipment} />
                     })}
+                    <div className='flex flex-row justify-between'>
+                        <Button onClick={(e) => {
+                            e.preventDefault();
+                            setNumSub((state) => ([...state, {}]))
+                        }}>Add Sub - Shipment</Button>
+                        <Button onClick={(e) => {
+                            e.preventDefault();
+                            setNumSub((state) => ([...state.slice(0, state.length - 1)]))
+                            setSubShipment((state) => ([...state.slice(0, state.length - 1)]))
+                        }}>remove</Button>
+                    </div>
+
                 </div>
                 {loading ? <Loader /> : <Button type="submit" className='w-3/6'>Create Shipment</Button>}
             </form>

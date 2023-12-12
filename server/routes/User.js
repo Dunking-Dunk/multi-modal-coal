@@ -2,6 +2,8 @@ import express from 'express'
 import cloudinary from "cloudinary";
 
 import User from '../models/User.js'
+import Vehicle from '../models/Vehicle.js';
+import Place from '../models/Place.js';
 import Error from '../utils/Error.js'
 import sendToken from '../utils/sendToken.js'
 import { authenticatedUser } from '../middleware/Auth.js'
@@ -174,7 +176,19 @@ router.put('/:id', authenticatedUser, async (req, res,next) => {
 router.delete('/:id', authenticatedUser, async (req, res) => { 
   const { id } = req.params;
   
-  await User.findByIdAndDelete(id)
+  const user = await User.findById(id)
+
+  if (user.vehicle) {
+    await Vehicle.findByIdAndUpdate(user.vehicle, {
+        $unset: {driver: ''}
+      })
+  }
+
+  if (user.supervisor) {
+    await Place.findByIdAndUpdate(user.supervisor, {
+        $unset: {supervisor: ''}
+      })
+  }
 
   res.status(201).json({
     success: true,

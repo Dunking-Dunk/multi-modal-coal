@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import Vehicle from './Vehicle.js';
+import Place from './Place.js';
 
 const PointSchema = {
     location: {
@@ -18,9 +20,13 @@ const PointSchema = {
     }
 }
 
-const subShippingSchema = mongoose.Schema({
+const subShippingSchema = new mongoose.Schema({
     origin: PointSchema,
     destination: PointSchema,
+    shipment: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Shipping'
+    },
     vehicles: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vehicle',
@@ -31,6 +37,11 @@ const subShippingSchema = mongoose.Schema({
     },
     eta: {
         type: Date
+    },
+    status: {
+        type: String,
+        enum: ['processing','started', 'completed'],
+        default: 'processing'
     },
     direction: {
         polyline: [{
@@ -45,6 +56,11 @@ const subShippingSchema = mongoose.Schema({
     },
     dispatch: {
         type: Boolean,
+        default: false
+    },
+    arrived: {
+        type: Boolean,
+        default: false
     },
     railRoute: {
         type: mongoose.Schema.Types.ObjectId,
@@ -52,7 +68,7 @@ const subShippingSchema = mongoose.Schema({
     }
 })
 
-const shippingSchema = mongoose.Schema({
+const shippingSchema = new mongoose.Schema({
     quantity: {
         type: Number,
         required: [true, 'Shipping Quantity required']
@@ -70,12 +86,24 @@ const shippingSchema = mongoose.Schema({
     eta: {
         type: Date
     },
+    status: {
+        type: String,
+        enum: ['processing', 'completed'],
+        default: 'processing'
+    },
     createdAt: {
         type: Date,
         default: Date.now,
     },
 })
 
+subShippingSchema.pre('remove',async function(next) {
+    // Remove all the assignment docs that reference the removed person.
+    await Vehicle.update({}, { $pull: { shipments: { $in: this._id } } }, { multi: true });
+    await Place.update({}, { $pull: { shipments: { $in: this._id } } }, { multi: true });
+  });
 
-export const SubShipping = mongoose.Schema('SubShipping', subShippingSchema)
+
+
+export const SubShipping = mongoose.model('SubShipping', subShippingSchema)
 export const Shipping = mongoose.model('Shipping', shippingSchema)

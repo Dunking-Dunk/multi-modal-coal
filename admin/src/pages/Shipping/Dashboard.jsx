@@ -1,13 +1,23 @@
 import React from "react";
-
+import { useSelector } from "react-redux";
 import Map from '../../components/map/Map'
+import CardOverview from '../../components/OverviewCard'
 
 const Dashboard = () => {
+    const { shipments } = useSelector((state) => state.Shipment)
+
     return (
         <div className="w-full">
-            <h1 className='text-4xl font-bold mb-4'>Shipment</h1>
-            <div className="w-full h-[700px]">
-                <Map />
+            <h1 className='text-4xl font-bold my-4'>Shipments</h1>
+            <div className="space-y-4">
+                <div className="w-full h-[700px]">
+                    <Map />
+                </div>
+                <div className="flex flex-row space-x-2">
+                    <CardOverview title='shipments' description='Total Number of shipments' value={shipments.length} />
+                    <CardOverview title='Active shipments' description='Total Number of Active shipments' value={shipments.length} />
+                    <CardOverview title='Completed Shipments' description='Total Number of Shipment completed' value={shipments.length} />
+                </div>
             </div>
 
         </div>

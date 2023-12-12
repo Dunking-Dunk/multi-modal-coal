@@ -77,6 +77,15 @@ router.put('/:id', authenticatedUser,async (req, res) => {
 router.delete('/:id',authenticatedUser, async (req, res) => {
     const { id } = req.params
     
+    const vehicle = await Vehicle.findById(id)
+
+    if (vehicle.driver) {
+        await User.findByIdAndUpdate(vehicle.driver, {
+            $unset: { vehicle: ''}
+        })
+    }
+
+
      await Vehicle.findByIdAndDelete(id)
 
     res.status(200).json({

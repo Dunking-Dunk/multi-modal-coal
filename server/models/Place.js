@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 
-const placeSchema = mongoose.Schema({
+const placeSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, "Please enter your name"],
@@ -61,10 +61,6 @@ const placeSchema = mongoose.Schema({
     ]
 })
 
-placeSchema.pre('remove', function(next) {
-    // Remove all the assignment docs that reference the removed person.
-    this.model('User').remove({ supervisor: this._id }, next);
-  });
 
 const Place = mongoose.model('Place', placeSchema)
 

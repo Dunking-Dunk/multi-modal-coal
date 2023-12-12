@@ -5,6 +5,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
+
 import store from '@/store/reducer/store'
 import { deleteVehicle } from "../store/reducer/VehicleReducer";
 import { deleteUser } from "../store/reducer/UserReducer";
@@ -120,6 +123,7 @@ export const userColumn = [
   }]
 
 import { deletePlace } from "../store/reducer/PlaceReducer";
+import { deleteShipment } from "../store/reducer/ShipmentReducer";
 
 export const PlaceColumn = [
   {
@@ -184,3 +188,249 @@ export const PlaceColumn = [
     },
   },
 ];
+
+export const shippingVehicleFormColumn = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "_id",
+    header: "Id",
+  },
+  {
+    accessorKey: "registerNumber",
+    header: "Registration Number",
+  },
+  {
+    accessorKey: "type",
+    header: "Vehicle Mode",
+  },
+  {
+    accessorKey: "shippingStatus",
+    headed: 'Shipping status'
+  },
+  {
+    accessorKey: "capacity",
+    headed: 'Vehicle Capacity'
+  }
+]
+
+export const ShippingColumn = [
+  {
+    accessorKey: "_id",
+    header: "Id",
+  },
+  {
+    accessorKey: "origin.place.name",
+    header: "Origin",
+  },
+  {
+    accessorKey: "destination.place.name",
+    header: "Destination",
+  },
+  {
+    accessorKey: "subShipping",
+    header: "Total Number of sub-shipment",
+    cell: ({ row }) => {
+      const id = row.getValue("subShipping");
+
+      return id.length
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Shipment Status",
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: ({ row }) => {
+      const id = row.getValue("_id");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          <Link
+            to={`/shipping/${id}`}
+            className="bg-secondary  h-full py-2 px-4 rounded-lg"
+          >
+            View
+          </Link>
+          <Link
+            to={`/place/update/${id}`}
+            className="bg-secondary  h-full py-2 px-4 rounded-lg"
+          >
+            Update
+          </Link>
+          <AlertDialog
+            content="The following will be permanently deleted"
+            onClick={() => {
+              store.dispatch(deleteShipment(id));
+            }}
+          >
+            Delete
+          </AlertDialog>
+        </div>
+      );
+    },
+  },
+];
+
+export const shippingVehicleViewColumn = [
+  {
+    accessorKey: "_id",
+    header: "Id",
+  },
+  {
+    accessorKey: "registerNumber",
+    header: "Registration Number",
+  },
+  {
+    accessorKey: "type",
+    header: "Vehicle Mode",
+  },
+  {
+    accessorKey: "shippingStatus",
+    headed: 'Shipping status'
+  },
+  {
+    accessorKey: "capacity",
+    headed: 'Vehicle Capacity'
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: ({ row }) => {
+      const id = row.getValue("_id");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          <Link
+            to={`/vehicle/${id}`}
+            className="bg-secondary  h-full py-2 px-4 rounded-lg"
+          >
+            View
+          </Link>
+        </div>
+      );
+    },
+  },
+]
+
+export const vehicleShippingColumn = [
+  {
+    accessorKey: "shipment",
+    header: "shipment Id",
+  },
+  {
+    accessorKey: "origin.place.name",
+    header: "Origin",
+  },
+  {
+    accessorKey: "destination.place.name",
+    header: "Destination",
+  },
+  {
+    accessorKey: "status",
+    header: "Shipment Status",
+  },
+  {
+    accessorKey: "dispatch",
+    header: "shipment dispatched",
+  },
+  {
+    accessorKey: "arrived",
+    header: "shipment Reached",
+  },
+
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: ({ row }) => {
+      const id = row.getValue("shipment");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          <Link
+            to={`/shipping/${id}`}
+            className="bg-secondary  h-full py-2 px-4 rounded-lg"
+          >
+            View Shipment
+          </Link>
+        </div>
+      );
+    },
+  },
+]
+
+export const placeShippingColumn = [
+  {
+    accessorKey: "shipment",
+    header: "shipment Id",
+  },
+  {
+    accessorKey: "origin.place.name",
+    header: "Origin",
+  },
+  {
+    accessorKey: "destination.place.name",
+    header: "Destination",
+  },
+  {
+    accessorKey: "status",
+    header: "Shipment Status",
+  },
+  {
+    accessorKey: "dispatch",
+    header: "shipment dispatched",
+  },
+  {
+    accessorKey: "arrived",
+    header: "shipment Reached",
+  },
+
+  {
+    accessorKey: "startDate",
+    header: "started",
+  },
+  {
+    accessorKey: "eta",
+    header: "Estimated time of arrival",
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: ({ row }) => {
+      const id = row.getValue("shipment");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          <Link
+            to={`/shipping/${id}`}
+            className="bg-secondary  h-full py-2 px-4 rounded-lg"
+          >
+            View Shipment
+          </Link>
+        </div>
+      );
+    },
+  },
+]

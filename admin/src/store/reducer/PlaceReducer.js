@@ -25,6 +25,18 @@ export const getPlace = createAsyncThunk('places/getPlace', async (body, thunkAP
     }
 });
 
+export const getPlaceShipments = createAsyncThunk('places/getPlaceShipments', async (body, thunkAPI) => {
+    try {
+        const place = await api.get(`/shipments/place/${body}`);
+        const data = place.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({ error: err.response.data });
+        }
+    }
+});
+
 export const createPlace = createAsyncThunk('places/createPlace', async (body, thunkAPI) => {
     try {
         const place = await api.post('/places', body);
@@ -121,6 +133,16 @@ const PlaceReducer = createSlice({
             state.loading = false;
         });
         builder.addCase(getPlace.rejected, (state, action) => {
+            state.loading = false;
+        });
+        builder.addCase(getPlaceShipments.pending, (state, action) => {
+            state.loading = true;
+        });
+        builder.addCase(getPlaceShipments.fulfilled, (state, action) => {
+            state.place = {...state.place, shipments: action.payload.shipments};
+            state.loading = false;
+        });
+        builder.addCase(getPlaceShipments.rejected, (state, action) => {
             state.loading = false;
         });
         builder.addCase(createPlace.pending, (state, action) => {

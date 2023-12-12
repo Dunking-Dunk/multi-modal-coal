@@ -3,7 +3,7 @@ import  validator  from 'validator';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, "Please enter your name"],
@@ -59,11 +59,6 @@ const userSchema = mongoose.Schema({
     }
 })
 
-userSchema.pre('remove', function(next) {
-  // Remove all the assignment docs that reference the removed person.
-  this.model('Vehicle').remove({ driver: this._id }, next);
-  this.model('Place').remove({ supervisor: this._id }, next);
-});
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) {

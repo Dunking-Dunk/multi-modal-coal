@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const vehicleSchema = mongoose.Schema({ 
+const vehicleSchema = new mongoose.Schema({ 
     make: {
         type: String,
         required: [true, 'Vehicle Make Required'],
@@ -26,12 +26,13 @@ const vehicleSchema = mongoose.Schema({
     status: {
         type: Boolean
     },
-    shipment: [{
+    shipments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Shipping'
     }],
     shippingStatus: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     //this is the id that is present in respective vehicle tcu with base details
     trackerId: {
@@ -73,10 +74,6 @@ const vehicleSchema = mongoose.Schema({
     },
 })
 
-vehicleSchema.pre('remove', function(next) {
-    // Remove all the assignment docs that reference the removed person.
-    this.model('User').remove({ vehicle: this._id }, next);
-  });
 
 const Vehicle = mongoose.model('Vehicle', vehicleSchema)
 
