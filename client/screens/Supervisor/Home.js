@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { FlatList } from 'react-native-gesture-handler';
 
 
-const HomeSup = ({ navigation }) => {
+    const HomeSup = ({ navigation }) => {
     
     function renderHeader(){
 
