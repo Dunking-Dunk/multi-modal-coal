@@ -20,13 +20,13 @@ const ViewVehicle = () => {
         dispatch(getVehicle(id)).then(() => {
             dispatch(getVehicleShipment(id))
         })
-
     }, [])
-    console.log(vehicle)
 
     useEffect(() => {
-        if (vehicle)
+        if (vehicle) {
+            setTracker(vehicle.tracker)
             socket.getVehicleLocation(vehicle.trackerId, setTracker)
+        }
 
         return () => {
             socket.stopVehicleLocation(vehicle?.trackerId)

@@ -10,12 +10,11 @@ import { shippingVehicleFormColumn } from "../../lib/columns";
 import { Button } from '@/components/ui/button'
 import { getDistanceAndTime } from "../../lib/getDistanceAndTime";
 import PlaceMarkers from "./PlaceMarker";
-import { milliseconds } from "date-fns";
-
 
 const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
     const { places, railroute, mines, railyard, port } = useSelector((state) => state.Place)
     const DirectionRef = useRef()
+    const geoServiceRef = useRef()
     const { vehicles, trains, trucks, ships } = useSelector((state) => state.Vehicle)
     const [shipment, setShipment] = useState([])
     const [shipmentVehicles, setShipmentVehicles] = useState([])
@@ -23,6 +22,7 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
     const [directions, setDirections] = useState({ polyline: [], distanceAndDuration: [] })
     const [routes, setRoutes] = useState([])
     const [vehiclesForm, setVehiclesForm] = useState([])
+    const [customPlace, setCustomPlace] = useState({})
 
     useEffect(() => {
         if (railroute)
@@ -31,6 +31,7 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
 
     useEffect(() => {
         DirectionRef.current = new google.maps.DirectionsService()
+        geoServiceRef.current = new google.maps.Geocoder()
         if (subShipment.length > 0) {
             const place = find(places, (place) => place._id === subShipment[subShipment.length - 1].destination.place)
             setShipment([place])
@@ -63,7 +64,6 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
 
         const checkRailrouteAndPlace = () => {
             forEach(routes, (route) => {
-
                 if (route.stops.includes(shipment[0]._id) && route.stops.includes(shipment[1]._id)) {
                     setDirections({ polyline: route.polyline, distanceAndDuration: route.distanceAndDuration })
                 }
@@ -119,8 +119,18 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
         setSubmitted(true)
     }
 
-    const handleClick = (e) => {
-
+    const handleClick = async (e) => {
+        const lng = e.latLng.lng()
+        const lat = e.latLng.lat()
+        const res = await geoServiceRef.current.geocode({ location: { lat, lng } })
+        setShipment((state) => ([...state, {
+            location: {
+                coordinate: [lng, lat]
+            },
+            name: res.results[0].address_components[1].long_name,
+            address: res.results[0].formatted_address,
+            type: 'others'
+        }]))
     }
 
     return (

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import { MarkerF, OverlayViewF, OverlayView } from '@react-google-maps/api'
 
 import Status from "../ActiveStatus";
-import Map from "./Map";
 
-const VehicleView = ({ vehicle, tracker }) => {
-    const { location: { coordinate: [lng, lat] }, speed } = tracker ? tracker : vehicle
+const VehicleMarker = ({ vehicle }) => {
     const [icon, setIcon] = useState('')
+    const { location: { coordinate: [lng, lat] }, speed } = vehicle
 
     useEffect(() => {
         setIcon(`/images/${vehicle.type}.svg`)
@@ -14,18 +14,20 @@ const VehicleView = ({ vehicle, tracker }) => {
 
     if (icon === `/images/${vehicle.type}.svg`)
         return (
-            <Map center={{ lat, lng }} zoom={18}>
-                {icon && <MarkerF position={{ lat, lng }} icon={{
+            <React.Fragment key={vehicle._id} >
+                <MarkerF position={{ lat, lng }} icon={{
                     url: icon,
-                    size: new google.maps.Size(128, 128),
+                    size: new google.maps.Size(64, 72),
                     anchor: new google.maps.Point(10, 30),
                     scaledSize: new google.maps.Size(50, 50),
-                }} />}
+                }} onClick={() => {
+                    navigate(`/vehicle/${vehicle._id}`)
+                }} />
                 <OverlayViewF
                     position={{ lat, lng }}
                     mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
                 >
-                    <div className="flex flex-row space-x-4 bg-primary-foreground p-2 rounded-lg items-center absolute left-12 -top-36 w-[200px] " >
+                    <div className="flex flex-row space-x-4 bg-primary-foreground p-2 rounded-lg items-center absolute left-12 -top-32 w-[200px] "  >
                         <div className="flex flex-col space-y-1 w-full">
                             <h5 className="text-lg font-bold uppercase border-b-2">{vehicle.make} - {vehicle.registerNumber}</h5>
                             <div className="flex flex-row gap-x-2 items-center  justify-between w-full">
@@ -39,8 +41,8 @@ const VehicleView = ({ vehicle, tracker }) => {
                         </div>
                     </div>
                 </OverlayViewF>
-            </Map>
+            </React.Fragment>
         )
 }
 
-export default VehicleView
+export default VehicleMarker

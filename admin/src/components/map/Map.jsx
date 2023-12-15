@@ -34,6 +34,7 @@ const MapView = (props) => {
                 options={{
                     mapId: "28fbb85fa828483f",
                 }}
+
             >
                 {props.children}
             </GoogleMap>

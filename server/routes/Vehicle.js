@@ -46,7 +46,7 @@ router.post('/', authenticatedUser, async (req, res) => {
 router.get('/:id',authenticatedUser, async (req, res) => {
     const { id } = req.params
     
-    const vehicle = await Vehicle.findById(id).populate('driver')
+    const vehicle = await Vehicle.findById(id).populate('driver').populate('tracker')
 
     res.status(200).json({
         success: true,

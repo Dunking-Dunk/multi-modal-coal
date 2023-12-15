@@ -19,21 +19,27 @@ const trackerSchema = new mongoose.Schema({
     //all tcu data comes here
     fuelLevel: {
         type: Number,
+        default: 0
     },
     engineRpm: {
         type: Number,
+        default: 0
     },
     fuelEfficieny: {
-        type: Number
+        type: Number,
+        default: 0
     },
     exhaustGasTemp: {
-        type: Number
+        type: Number,
+        default: 0
     },
     oxygenLevel: {
-        type: Number
+        type: Number,
+        default: 0
     },
     coolantTemp: {
-        type: Number
+        type: Number,
+        default: 0
     },
     trackerId: {
         type: String,

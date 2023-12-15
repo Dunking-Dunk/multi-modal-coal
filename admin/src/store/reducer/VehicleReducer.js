@@ -16,7 +16,7 @@ export const getAllVehicle = createAsyncThunk('vehicle/getAllVehicle', async (bo
 
 export const getVehicle = createAsyncThunk('vehicle/getVehicle', async (body, thunkAPI) => {
     try {
-        const vehicle = await api.get(`/vehicles/${body}`,)
+        const vehicle = await api.get(`/vehicles/${body}`)
         const data = vehicle.data;
         return data;
     } catch (err) {
