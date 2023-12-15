@@ -6,6 +6,7 @@ import Log from  '../models/Log.js'
 
 const router = express.Router()
 
+
 router.get('/', async(req,res) => {
     const shipments = await Shipping.find({}).populate('origin.place').populate('destination.place')
 
@@ -72,7 +73,10 @@ router.post('/', async (req, res) => {
     
     await Log.create({
         message: `Shipment created`,
-        reference: [shipment._id]
+        reference: [{
+            id: shipment._id,
+            ref: 'shipping'
+        }]
     })
     
     const finalShipment = await Shipping.findById(shipment._id).populate('origin.place').populate('destination.place')
@@ -132,6 +136,42 @@ router.delete('/:id', async (req, res) => {
     })
 })
 
+router.get('/vehicle/validateform', async(req,res) => {
+    const startDate = new Date(req.query.start)
+    const eta = new Date(req.query.eta)
+    const type = req.query.type
+    const filteredVehicle = []
+
+    const vehicles = await Vehicle.find({ type }).populate('shipments')
+    for (const vehicle of vehicles) {
+        if (vehicle.shipments.length > 0) {
+            for (const shipment of vehicle.shipments) {
+                const start = new Date(shipment.startDate)
+                const end = new Date(shipment.eta)
+                if (startDate >= start && startDate <= end) {
+                   break
+                }
+                else {
+                    const present = filteredVehicle.findIndex(a => a._id === vehicle._id)
+                    if (present === -1)
+                        filteredVehicle.push(vehicle)
+                    
+                    
+                }
+           }
+        } else {
+            filteredVehicle.push(vehicle)
+        }
+        
+    }
+
+    res.status(200).json({
+        success: true,
+        length: filteredVehicle.length,
+        vehicles: filteredVehicle,
+    })
+})
+
 router.get('/vehicle/:id', async (req, res) => {
     const {id} = req.params
     const shipments = await SubShipping.find({ vehicles: {$in: id} }).populate('origin.place').populate('destination.place')
@@ -142,6 +182,7 @@ router.get('/vehicle/:id', async (req, res) => {
     })
 })
 
+
 router.get('/place/:id', async (req, res) => { 
     const {id} = req.params
     const shipments = await SubShipping.find({ $or: [{'origin.place':  id}, {'destination.place': id}]}).populate('origin.place').populate('destination.place')
@@ -151,5 +192,7 @@ router.get('/place/:id', async (req, res) => {
         shipments
     })
 })
+
+
 
 export default router

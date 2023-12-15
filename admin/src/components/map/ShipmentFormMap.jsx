@@ -10,6 +10,7 @@ import { shippingVehicleFormColumn } from "../../lib/columns";
 import { Button } from '@/components/ui/button'
 import { getDistanceAndTime } from "../../lib/getDistanceAndTime";
 import PlaceMarkers from "./PlaceMarker";
+import api from '../../api/axios'
 
 const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
     const { places, railroute, mines, railyard, port } = useSelector((state) => state.Place)
@@ -22,7 +23,6 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
     const [directions, setDirections] = useState({ polyline: [], distanceAndDuration: [] })
     const [routes, setRoutes] = useState([])
     const [vehiclesForm, setVehiclesForm] = useState([])
-    const [customPlace, setCustomPlace] = useState({})
 
     useEffect(() => {
         if (railroute)
@@ -34,7 +34,10 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
         geoServiceRef.current = new google.maps.Geocoder()
         if (subShipment.length > 0) {
             const place = find(places, (place) => place._id === subShipment[subShipment.length - 1].destination.place)
-            setShipment([place])
+            if (place)
+                setShipment([place])
+            else
+                setShipment([subShipment[subShipment.length - 1].destination.customPlace])
         }
     }, [])
 
@@ -69,14 +72,22 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
                 }
 
                 if (route.stops.includes(shipment[0]._id) && route.stops.includes(shipment[1]._id)) {
-                    setVehiclesForm(trains)
+                    checkVehicle(trains, 'train')
                 } else if (shipment[0].type === 'port') {
-                    setVehiclesForm(ships)
+                    checkVehicle(ships, 'ship')
                 }
                 else {
-                    setVehiclesForm(trucks)
+                    checkVehicle(trucks, 'truck')
                 }
             })
+        }
+
+        const checkVehicle = async (vehicles, type) => {
+            const { totalTime } = getDistanceAndTime(directions.distanceAndDuration)
+            const start = subShipment[subShipment.length - 1]?.eta ? subShipment[subShipment.length - 1].eta : startDate
+            const eta = addTime(start, totalTime)
+            const { data } = await api.get(`/shipments/vehicle/validateform?eta=${eta}&start=${start}&type=${type}`)
+            setVehiclesForm(data.vehicles ? data.vehicles : vehicles)
         }
 
 
@@ -101,13 +112,15 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
                 location: {
                     coordinate: shipment[0].location.coordinate
                 },
-                place: shipment[0]._id
+                place: shipment[0]._id && shipment[0]._id,
+                customPlace: shipment[0]
             },
             destination: {
                 location: {
                     coordinate: shipment[1].location.coordinate
                 },
-                place: shipment[1]._id
+                place: shipment[1]._id && shipment[1]._id,
+                customPlace: shipment[1]
             },
             vehicles: shipmentVehicles,
             direction: directions,
@@ -129,6 +142,7 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
             },
             name: res.results[0].address_components[1].long_name,
             address: res.results[0].formatted_address,
+            placeId: res.results[0].placeId,
             type: 'others'
         }]))
     }

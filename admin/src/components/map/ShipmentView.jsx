@@ -1,36 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { MarkerF, Polyline } from "@react-google-maps/api";
+import { forEach } from "lodash";
+import { useSelector } from "react-redux";
 
 import Map from "./Map";
+import VehicleMarker from "./VehicleMarker";
+import socket from "../../api/socket";
+import { map } from 'lodash'
 
 const ShipmentView = ({ allPlaces }) => {
-    const [routes, setRoutes] = useState([])
+    const [routes, setRoutes] = useState()
+    const { vehicles } = useSelector((state) => state.Vehicle)
 
     useEffect(() => {
-        allPlaces.forEach((route) => {
-            setRoutes((state) => [...state, route.direction.polyline])
+        let routes = []
+        forEach(allPlaces, (route) => {
+            routes.push(route.direction.polyline)
         })
+        setRoutes(routes)
+    }, [allPlaces])
+
+    useEffect(() => {
+        socket.getAllVehiclesLocations("allVehicles")
+
+        return () => {
+            socket.stopAllVehicleLocations("allVehicles")
+        }
     }, [])
 
     return (
         <Map>
-            {allPlaces.map((place, index) => {
+            {map(allPlaces, (place) => {
                 return (
-                    <MarkerF position={{ lat: place.origin.location.coordinate[1], lng: place.origin.location.coordinate[0] }} key={index} />
+                    <React.Fragment key={place._id}>
+                        <MarkerF position={{ lat: place.origin.location.coordinate[1], lng: place.origin.location.coordinate[0] }} />
+
+                        {place.status === 'dispatched' && place.status !== 'completed' && map(place.vehicles, (vehicle) => {
+                            const current = vehicles.find((v) => v._id === vehicle._id)
+                            return <VehicleMarker vehicle={current} key={vehicle._id} />
+                        })}
+                    </React.Fragment>
+
                 )
 
             })}
+
             <MarkerF position={{ lat: allPlaces[allPlaces.length - 1].destination.location.coordinate[1], lng: allPlaces[allPlaces.length - 1].destination.location.coordinate[0] }} />
-            {routes.map((route, index) => {
+            {routes && map(routes, (route, index) => {
                 const polyLine = route.map((poly) => ({ lat: poly[0], lng: poly[1] }))
+
                 return (
                     <Polyline
                         key={index}
                         path={polyLine}
-
                         options={{
                             strokeColor: '#F94C10',
-                            strokeOpacity: allPlaces[index]?.status === 'dispatched' ? 1 : 0.1,
+                            strokeOpacity: allPlaces[index]?.status === 'dispatched' ? 1 : 0.2,
                             strokeWeight: 3,
 
                         }} />

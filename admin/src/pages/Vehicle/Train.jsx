@@ -36,7 +36,7 @@ const Train = () => {
             <h1 className="text-4xl font-bold">Trains</h1>
             <div className="flex flex-row space-x-4">
                 <div className="w-5/6 h-[600px]">
-                    <AllVehiclesView railroutes={railroute} type='wagon' />
+                    <AllVehiclesView railroutes={railroute} type='train' />
                 </div>
                 <div className="flex flex-col space-y-4 w-1/6">
                     <CardOverview title='Total' description='Total Number of trains' value={trains.length} />

@@ -244,8 +244,13 @@ export const ShippingColumn = [
     header: "Origin",
   },
   {
-    accessorKey: "destination.place.name",
+    accessorKey: "destination",
     header: "Destination",
+    cell: ({ row }) => {
+      const place = row.getValue("destination");
+
+      return place.place?.name ? place.place?.name : place.customPlace.name
+    },
   },
   {
     accessorKey: "subShipping",

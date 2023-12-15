@@ -12,7 +12,7 @@ function StepperComp({ origin, destination, status, distanceAndDuration }) {
             <div className="flex justify-between items-center relative">
                 <div className="space-y-2">
                     <h5 className='font-bold'>Origin</h5>
-                    <PlaceCard place={origin.place} />
+                    <PlaceCard place={origin.place ? origin.place : origin.customPlace} />
                 </div>
                 <div className='w-[100%] text-center'>
                     <h1>To</h1>
@@ -22,7 +22,7 @@ function StepperComp({ origin, destination, status, distanceAndDuration }) {
                 </div>
                 <div className="space-y-2">
                     <h5 className='font-bold'>Destination</h5>
-                    <PlaceCard place={destination.place} />
+                    <PlaceCard place={destination.place ? destination.place : destination.customPlace} />
                 </div>
             </div>
         </div>

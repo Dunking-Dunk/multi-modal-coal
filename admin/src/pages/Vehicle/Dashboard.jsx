@@ -5,10 +5,9 @@ import DataTable from "../../components/DataTable";
 import { VehicleColumn } from "../../lib/columns";
 import CardOverview from "../../components/OverviewCard";
 import AllVehicleView from "../../components/map/allVehicles";
-import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-    const { vehicles } = useSelector((state) => state.Vehicle)
+    const { vehicles, trains } = useSelector((state) => state.Vehicle)
 
     return (
         <div className="flex flex-col gap-y-4 w-full h-full">
@@ -20,7 +19,7 @@ const Dashboard = () => {
                 <CardOverview title='Vehicles' description='Total Number of Vehicles' value={vehicles.length} />
                 <CardOverview title='Active Vehicles' description='Total Number of Active Vehicles' value={vehicles.length} />
                 <CardOverview title='Trucks' description='Total Number of Trucks' value={vehicles.length} />
-                <CardOverview title='Vehicles' description='Total Number of Wagons' value={vehicles.length} />
+                <CardOverview title='Trains' description='Total Number of Trains' value={trains.length} />
                 <CardOverview title='Vehicles' description='Total Number of Ships' value={vehicles.length} />
             </div>
             <div className="my-4 space-y-2">

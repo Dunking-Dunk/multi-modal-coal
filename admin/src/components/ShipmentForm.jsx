@@ -31,7 +31,6 @@ import ShipmentFormMap from './map/ShipmentFormMap'
 import { createShipment } from '../store/reducer/ShipmentReducer'
 import { forEach } from 'lodash'
 
-
 const ShipmentForm = ({ update }) => {
     const dispatch = useDispatch()
     const { toast } = useToast()
@@ -72,7 +71,7 @@ const ShipmentForm = ({ update }) => {
 
 
     const onSubmit = (data) => {
-        console.log(subShipment[subShipment.length - 1].eta)
+
         if (subShipment.length > 0) {
             const body = {
                 ...data,
@@ -102,7 +101,7 @@ const ShipmentForm = ({ update }) => {
             })
         }
     }
-
+    console.log(form.getValues('startDate'))
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-8 ">

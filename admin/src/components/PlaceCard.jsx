@@ -11,7 +11,7 @@ const PlaceCard = ({ place }) => {
             <h3 className="text-2xl font-semibold">{place.name}</h3>
             <p className="mb-4 opacity-60">{place.type}</p>
             <p className="text-regular mb-4 w-[300px]">{place.address.slice(0, 50)}...</p>
-            <Button onClick={() => navigate(`/place/${place._id}`)}>View Place</Button>
+            {place.type !== 'others' && <Button onClick={() => navigate(`/place/${place._id}`)}>View Place</Button>}
         </Card>
     )
 }

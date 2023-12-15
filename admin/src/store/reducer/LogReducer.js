@@ -17,6 +17,7 @@ export const getAllLogs = createAsyncThunk('log/getAllLogs', async (body, thunkA
 export const getLogs = createAsyncThunk('log/getLogs', async (body, thunkAPI) => {
     try {
         const logs = await api.get(`/logs/all/${body}`)
+    
         const data = logs.data;
         return data;
     } catch (err) {

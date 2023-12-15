@@ -28,7 +28,7 @@ const vehicleSchema = new mongoose.Schema({
     },
     shipments: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Shipping'
+        ref: 'SubShipping'
     }],
     shippingStatus: {
         type: Boolean,

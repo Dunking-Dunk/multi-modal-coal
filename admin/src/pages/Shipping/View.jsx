@@ -25,7 +25,7 @@ const View = () => {
         dispatch(getShipment(id)).then(() => {
             dispatch(getLogs(id))
         })
-    }, [])
+    }, [dispatch, id])
 
     if (shipment)
         return (
@@ -66,7 +66,7 @@ const View = () => {
                         <div className="flex justify-between items-center">
                             <div className="space-y-2">
                                 <h5 className='font-bold'>Origin</h5>
-                                <PlaceCard place={shipment.subShipping[0].origin.place} />
+                                <PlaceCard place={shipment.subShipping[shipment.subShipping.length - 1].origin.place ? shipment.subShipping[shipment.subShipping.length - 1].origin.place : shipment.subShipping[shipment.subShipping.length - 1].origin.customPlace} />
                             </div>
                             <div className="w-[100%] text-center">
                                 <h1>To</h1>
@@ -75,7 +75,7 @@ const View = () => {
 
                             <div className="space-y-2">
                                 <h5 className='font-bold'>Destination</h5>
-                                <PlaceCard place={shipment.subShipping[shipment.subShipping.length - 1].destination.place} />
+                                <PlaceCard place={shipment.subShipping[shipment.subShipping.length - 1].destination.place ? shipment.subShipping[shipment.subShipping.length - 1].destination.place : shipment.subShipping[shipment.subShipping.length - 1].destination.customPlace} />
                             </div>
                         </div>
                     </div>

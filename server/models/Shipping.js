@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import Vehicle from './Vehicle.js';
-import Place from './Place.js';
 
 const PointSchema = {
     location: {
@@ -17,6 +15,9 @@ const PointSchema = {
     place: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Place',
+    },
+    customPlace: {
+        type: Object
     }
 }
 

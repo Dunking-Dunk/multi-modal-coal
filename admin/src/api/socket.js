@@ -52,6 +52,7 @@ class Socket {
     getLog() {
         this.socket.emit("join-room", 'log')
         this.socket.on('getLog', (data) => {
+            console.log(data)
             store.dispatch(setNotification(data))
         })
     } 

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 
 import { MarkerF, OverlayViewF, OverlayView } from '@react-google-maps/api'
-
+import { useNavigate } from "react-router-dom";
 import Status from "../ActiveStatus";
 
 const VehicleMarker = ({ vehicle }) => {
     const [icon, setIcon] = useState('')
+    const navigate = useNavigate()
     const { location: { coordinate: [lng, lat] }, speed } = vehicle
 
     useEffect(() => {
