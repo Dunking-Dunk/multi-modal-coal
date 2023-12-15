@@ -15,6 +15,7 @@ export const getDistanceAndTime = (a) => {
 
     let totalTimeTaken = `${rhours} hours ${rminutes} minutes`
 
-    return [totalDistance, totalTimeTaken]
-
+    return {
+        totalDistance, totalTimeTaken, totalTime
+    }
 }

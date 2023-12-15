@@ -2,6 +2,7 @@ import { io } from "socket.io-client";
 import store from '../store/reducer/store'
 
 import {setTracker} from '../store/reducer/VehicleReducer'
+import { setNotification } from "../store/reducer/LogReducer";
 
 class Socket {
     constructor() {
@@ -14,6 +15,7 @@ class Socket {
             transports: ["websocket"],
         };
         this.createConnection()
+        this.getLog()
     }
 
     createConnection() {
@@ -47,6 +49,12 @@ class Socket {
         this.socket.emit("leave-room", room);
       }
 
+    getLog() {
+        this.socket.emit("join-room", 'log')
+        this.socket.on('getLog', (data) => {
+            store.dispatch(setNotification(data))
+        })
+    } 
 
   
 

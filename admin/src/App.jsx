@@ -10,11 +10,13 @@ import Main from './pages/Main';
 import { currentUser } from './store/reducer/UserReducer';
 import './api/socket';
 import Loader from './components/Loader'
+import useNotification from './components/Notification';
 
 function App() {
   const { user } = useSelector((state) => state.User)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const notification = useNotification()
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',

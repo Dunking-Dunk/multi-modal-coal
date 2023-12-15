@@ -40,7 +40,7 @@ const subShippingSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['processing','started', 'completed'],
+        enum: ['processing','dispatched', 'completed'],
         default: 'processing'
     },
     direction: {
@@ -88,8 +88,8 @@ const shippingSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['processing', 'completed'],
-        default: 'processing'
+        enum: ['dispatched', 'completed'],
+        default: 'dispatched'
     },
     createdAt: {
         type: Date,

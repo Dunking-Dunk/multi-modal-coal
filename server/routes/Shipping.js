@@ -2,6 +2,7 @@ import express from 'express'
 import { Shipping, SubShipping } from '../models/Shipping.js'
 import Vehicle from '../models/Vehicle.js'
 import Place from '../models/Place.js'
+import Log from  '../models/Log.js'
 
 const router = express.Router()
 
@@ -15,13 +16,15 @@ router.get('/', async(req,res) => {
 })
 
 router.post('/', async (req, res) => { 
-    const { quantity, origin, destination, startDate, eta, subShipments } = req.body
+    const { quantity, origin, destination, startDate, eta, subShipments,status } = req.body
 
     const shipment = await Shipping.create({
         origin,
         destination,
         quantity,
         startDate,
+        eta,
+        status
     })
 
     let subShipping = []
@@ -34,12 +37,18 @@ router.post('/', async (req, res) => {
                     shipments: s._id
                 }
             })
+            // await Log.create({
+            //     message: `Shipment Assigned to Vehicle with id ${vehicle}`,
+            //     title: 'Shipment',
+            //     reference: [shipment._id,s._id, vehicle]
+            // })
         })
         await Place.findByIdAndUpdate(origin.place, {
               $push: {
                     shipments: s._id
                 }
         })
+        
         if (destination.place) {
             await Place.findByIdAndUpdate(destination.place, {
                 $push: {
@@ -47,16 +56,30 @@ router.post('/', async (req, res) => {
                 }
                 })
         }
+
+        // await Log.create({
+        //     message: `Shipment Assigned to places`,
+        //     title: 'Shipment',
+        //     reference: [shipment._id, s._id,origin.place,destination.place]
+        // })
+       
          subShipping.push(s._id)
     }
 
      await Shipping.findOneAndUpdate({ _id: shipment._id }, {
         subShipping: subShipping
+     })
+    
+    await Log.create({
+        message: `Shipment created`,
+        reference: [shipment._id]
     })
-    const finalShipment = await Shipping.findById(shipment._id)
+    
+    const finalShipment = await Shipping.findById(shipment._id).populate('origin.place').populate('destination.place')
+   
     res.status(200).json({
         success: true,
-        finalShipment
+        shipment:finalShipment
     })
 })
 

@@ -27,10 +27,12 @@ const ShipmentView = ({ allPlaces }) => {
                     <Polyline
                         key={index}
                         path={polyLine}
+
                         options={{
                             strokeColor: '#F94C10',
-                            strokeOpacity: 1,
+                            strokeOpacity: allPlaces[index]?.status === 'dispatched' ? 1 : 0.1,
                             strokeWeight: 3,
+
                         }} />
                 )
             })

@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import api from '../../api/axios'
 
-export const getAllShipments = createAsyncThunk('vehicle/getAllShipment', async (body, thunkAPI) => {
+export const getAllShipments = createAsyncThunk('shipment/getAllShipment', async (body, thunkAPI) => {
     try {
         const shipments = await api.get('/shipments')
         const data = shipments.data;
@@ -14,7 +14,7 @@ export const getAllShipments = createAsyncThunk('vehicle/getAllShipment', async 
     }
 })
 
-export const createShipment = createAsyncThunk('vehicle/createShipment', async (body, thunkAPI) => {
+export const createShipment = createAsyncThunk('shipment/createShipment', async (body, thunkAPI) => {
     try {
         const shipment = await api.post('/shipments', body)
         const data = shipment.data;
@@ -26,7 +26,7 @@ export const createShipment = createAsyncThunk('vehicle/createShipment', async (
     }
 })
 
-export const getShipment = createAsyncThunk('vehicle/getShipment', async (body, thunkAPI) => {
+export const getShipment = createAsyncThunk('shipment/getShipment', async (body, thunkAPI) => {
     try {
         const shipment = await api.get(`/shipments/${body}`)
         const data = shipment.data;
@@ -38,7 +38,7 @@ export const getShipment = createAsyncThunk('vehicle/getShipment', async (body, 
     }
 })
 
-export const deleteShipment = createAsyncThunk('vehicle/deleteShipment', async (body, thunkAPI) => {
+export const deleteShipment = createAsyncThunk('shipment/deleteShipment', async (body, thunkAPI) => {
     try {
          await api.delete(`/shipments/${body}`)
         return body;

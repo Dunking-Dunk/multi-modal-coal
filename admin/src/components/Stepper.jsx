@@ -5,10 +5,10 @@ import PlaceCard from "@/components/PlaceCard";
 import { getDistanceAndTime } from '@/lib/getDistanceAndTime'
 
 function StepperComp({ origin, destination, status, distanceAndDuration }) {
-    const [distance, time] = getDistanceAndTime(distanceAndDuration)
+    const { totalDistance, totalTimeTaken } = getDistanceAndTime(distanceAndDuration)
 
     return (
-        <div className='flex flex-col justify-between relative my-5 '>
+        <div className='flex flex-col justify-between relative my-4'>
             <div className="flex justify-between items-center relative">
                 <div className="space-y-2">
                     <h5 className='font-bold'>Origin</h5>
@@ -16,8 +16,8 @@ function StepperComp({ origin, destination, status, distanceAndDuration }) {
                 </div>
                 <div className='w-[100%] text-center'>
                     <h1>To</h1>
-                    <p>{distance}</p>
-                    <p>{time}</p>
+                    <p>{totalDistance}</p>
+                    <p>{totalTimeTaken}</p>
                     <Progress value={status === 'completed' ? 100 : 10} className="w-[100%] -z-10 " />
                 </div>
                 <div className="space-y-2">

@@ -29,6 +29,7 @@ import { useToast } from "@/components/ui/use-toast"
 import Loader from './Loader'
 import ShipmentFormMap from './map/ShipmentFormMap'
 import { createShipment } from '../store/reducer/ShipmentReducer'
+import { forEach } from 'lodash'
 
 
 const ShipmentForm = ({ update }) => {
@@ -69,16 +70,20 @@ const ShipmentForm = ({ update }) => {
         }
     )
 
+
     const onSubmit = (data) => {
+        console.log(subShipment[subShipment.length - 1].eta)
         if (subShipment.length > 0) {
             const body = {
                 ...data,
                 origin: subShipment[0].origin,
                 destination: subShipment[subShipment.length - 1].destination,
-                subShipments: subShipment
+                subShipments: subShipment,
+                eta: subShipment[subShipment.length - 1].eta,
+                status: 'dispatched'
             }
-            dispatch(createShipment(body)).then((state) => {
 
+            dispatch(createShipment(body)).then((state) => {
                 if (!state.error) {
                     toast({
                         title: 'Created Shipment',
@@ -151,7 +156,7 @@ const ShipmentForm = ({ update }) => {
                                 </PopoverContent>
                             </Popover>
                             <FormDescription>
-                                Starting Date of the shipment
+                                Starting Date of the shipment. Enter the date to add sub-shipment
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -159,18 +164,18 @@ const ShipmentForm = ({ update }) => {
                 />
                 <div className='py-2'>
                     {numSub.map((_, index) => {
-                        return <ShipmentFormMap key={index} index={index} setSubShipment={setSubShipment} subShipment={subShipment} />
+                        return <ShipmentFormMap key={index} index={index} setSubShipment={setSubShipment} subShipment={subShipment} startDate={form.getValues('startDate')} />
                     })}
                     <div className='flex flex-row justify-between'>
                         <Button onClick={(e) => {
                             e.preventDefault();
-
                             setNumSub((state) => ([...state, {}]))
-                        }} disabled={!(subShipment.length >= numSub.length || numSub.length === 0)}>Add Sub - Shipment</Button>
+                        }} disabled={!((subShipment.length >= numSub.length || numSub.length === 0) && form.getValues('startDate'))}>Add Sub - Shipment</Button>
                         <Button onClick={(e) => {
                             e.preventDefault();
                             setNumSub((state) => ([...state.slice(0, state.length - 1)]))
-                            setSubShipment((state) => ([...state.slice(0, state.length - 1)]))
+                            if (subShipment.length === numSub.length)
+                                setSubShipment((state) => ([...state.slice(0, state.length - 1)]))
                         }}>remove</Button>
                     </div>
 

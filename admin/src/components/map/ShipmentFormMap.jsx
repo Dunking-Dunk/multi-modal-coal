@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Polyline } from '@react-google-maps/api'
 import { useSelector } from "react-redux";
 import polyline from '@mapbox/polyline'
+import { find, forEach } from 'lodash'
 
 import Map from "./Map";
 import Table from '../DataTable'
@@ -9,16 +10,19 @@ import { shippingVehicleFormColumn } from "../../lib/columns";
 import { Button } from '@/components/ui/button'
 import { getDistanceAndTime } from "../../lib/getDistanceAndTime";
 import PlaceMarkers from "./PlaceMarker";
+import { milliseconds } from "date-fns";
 
-const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
+
+const ShipmentFormMap = ({ index, setSubShipment, subShipment, startDate }) => {
     const { places, railroute, mines, railyard, port } = useSelector((state) => state.Place)
     const DirectionRef = useRef()
-    const { vehicles } = useSelector((state) => state.Vehicle)
+    const { vehicles, trains, trucks, ships } = useSelector((state) => state.Vehicle)
     const [shipment, setShipment] = useState([])
     const [shipmentVehicles, setShipmentVehicles] = useState([])
     const [submitted, setSubmitted] = useState(false)
     const [directions, setDirections] = useState({ polyline: [], distanceAndDuration: [] })
     const [routes, setRoutes] = useState([])
+    const [vehiclesForm, setVehiclesForm] = useState([])
 
     useEffect(() => {
         if (railroute)
@@ -27,6 +31,10 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
 
     useEffect(() => {
         DirectionRef.current = new google.maps.DirectionsService()
+        if (subShipment.length > 0) {
+            const place = find(places, (place) => place._id === subShipment[subShipment.length - 1].destination.place)
+            setShipment([place])
+        }
     }, [])
 
     useEffect(() => {
@@ -53,24 +61,41 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
                 }
         }
 
-        const checkRailroute = () => {
-            routes.forEach((route) => {
+        const checkRailrouteAndPlace = () => {
+            forEach(routes, (route) => {
 
                 if (route.stops.includes(shipment[0]._id) && route.stops.includes(shipment[1]._id)) {
                     setDirections({ polyline: route.polyline, distanceAndDuration: route.distanceAndDuration })
                 }
+
+                if (route.stops.includes(shipment[0]._id) && route.stops.includes(shipment[1]._id)) {
+                    setVehiclesForm(trains)
+                } else if (shipment[0].type === 'port') {
+                    setVehiclesForm(ships)
+                }
+                else {
+                    setVehiclesForm(trucks)
+                }
             })
         }
 
+
         if (shipment.length > 1) {
             helper()
-            checkRailroute()
+            checkRailrouteAndPlace()
         }
 
     }, [shipment])
 
+    const addTime = (theDate, milliseconds) => {
+        return new Date(theDate.getTime() + milliseconds * 1000)
+    }
 
     const handleSubmit = () => {
+        const { totalTime } = getDistanceAndTime(directions.distanceAndDuration)
+        const start = subShipment[subShipment.length - 1]?.eta ? subShipment[subShipment.length - 1].eta : startDate
+        const eta = addTime(start, totalTime)
+
         setSubShipment((state) => ([...state, {
             origin: {
                 location: {
@@ -85,7 +110,10 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
                 place: shipment[1]._id
             },
             vehicles: shipmentVehicles,
-            direction: directions
+            direction: directions,
+            startDate: start,
+            eta,
+            status: subShipment.length >= 1 ? 'processing' : 'dispatched'
         }]))
 
         setSubmitted(true)
@@ -135,7 +163,12 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
                                     <>
                                         <div className=" text-center">
                                             <p>To</p>
-                                            {directions.distanceAndDuration && <p>{getDistanceAndTime(directions.distanceAndDuration)}</p>}
+                                            {directions.distanceAndDuration && (
+                                                <div>
+                                                    <p>{getDistanceAndTime(directions.distanceAndDuration).totalDistance}</p>
+                                                    <p>{getDistanceAndTime(directions.distanceAndDuration).totalTimeTaken}</p>
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="p-6">
                                             <h5 className="text-2xl font-medium ">{shipment[1].name}</h5>
@@ -151,7 +184,7 @@ const ShipmentFormMap = ({ index, setSubShipment, subShipment }) => {
                         shipment.length > 1 && (
                             <>
                                 <h3 className="text-2xl mb-2 font-bold">Select Vehicles for Shipment</h3>
-                                <Table columns={shippingVehicleFormColumn} data={vehicles} getSelectedRow={setShipmentVehicles} />
+                                <Table columns={shippingVehicleFormColumn} data={vehiclesForm} getSelectedRow={setShipmentVehicles} />
                             </>
                         )
                     }

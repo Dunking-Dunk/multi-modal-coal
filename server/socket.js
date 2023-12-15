@@ -1,5 +1,6 @@
 import { io } from "./index.js"
 
+import Logs from "./models/Log.js"
 import Tracker from './models/Tracker.js'
 import Vehicle from "./models/Vehicle.js"
 
@@ -27,8 +28,8 @@ export const connection = () => {
     
     const changeStreamTracker = Tracker.collection.watch([], watchOptions)
     const changeStreamVehicle= Vehicle.collection.watch([], watchOptions)
-    // const changeStreamStop = Stop.collection.watch([], watchOptions)
-    // const changeStreamDriver = Driver.collection.watch([], watchOptions)
+    const changeStreamLog = Logs.collection.watch([], watchOptions)
+    
     changeStreamTracker.on('change', (data) => {
         const fullDocument = data.fullDocument
         if (data.operationType === 'insert') {
@@ -48,19 +49,19 @@ export const connection = () => {
             // }
         }
     })
-    // changeStreamStop.on('change', (data: any) => {
-    //     const fullDocument = data.fullDocument
-    //     if (data.operationType === 'update') {
-    //         io.emit('updateStop', { ...fullDocument, id: fullDocument._id })
-    //     }
-    // })
 
-    // changeStreamDriver.on('change', (data: any) => {
-    //     const fullDocument = data.fullDocument
-    //     if (data.operationType === 'update') {
-    //         io.emit('updateDriver', { ...fullDocument, id: fullDocument._id })
-    //     }
-    // })
+    changeStreamLog.on('change',async (data) => {
+        const fullDocument = data.fullDocument
+        if (data.operationType === 'insert') {
+            console.log('lol')
+            io.to('log').emit('getLog', fullDocument)
+            // if (fullDocument.type) {
+            //     const typeVehicles = await Vehicle.find({ type: fullDocument.type })
+             
+            //     io.to(fullDocument.type).emit('getAllVehicleLocation',typeVehicles)
+            // }
+        }
+    })
 
 
 }

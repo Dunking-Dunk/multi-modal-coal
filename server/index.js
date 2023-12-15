@@ -16,9 +16,11 @@ import VehicleRouter from './routes/Vehicle.js'
 import PlaceRouter from './routes/Place.js'
 import TrackerRouter from './routes/Tracker.js'
 import RouteRouter from './routes/Route.js'
+import LogRouter from './routes/Log.js';
 import ShipmentRouter from './routes/Shipping.js'
 
 import ErrorHandler from './middleware/ErrorHandler.js'
+
 
 const app = express()
 const PORT = 4000
@@ -61,6 +63,7 @@ app.use('/api/places', PlaceRouter)
 app.use('/api/trackers', TrackerRouter)
 app.use('/api/route', RouteRouter)
 app.use('/api/shipments', ShipmentRouter)
+app.use('/api/logs',LogRouter)
 
 app.get('/', (req, res) => {
     res.send('hello')

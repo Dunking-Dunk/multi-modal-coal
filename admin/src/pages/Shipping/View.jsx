@@ -12,20 +12,19 @@ import Loader from "../../components/Loader";
 import { shippingVehicleViewColumn } from '../../lib/columns'
 import Table from '../../components/DataTable'
 import StepperComp from "../../components/Stepper";
-
-const tags = Array.from({ length: 50 }).map(
-    (_, i, a) => <div className="p-4 rounded-xl border-2 my-2" key={i}>
-        `v1.2.0-beta.${a.length - i}`
-    </div>
-)
+import { getLogs } from "../../store/reducer/LogReducer";
+import Log from "../../components/Log";
 
 const View = () => {
     const { id } = useParams()
     const dispatch = useDispatch()
     const { shipment } = useSelector((state) => state.Shipment)
+    const { logs } = useSelector((state) => state.Log)
 
     useEffect(() => {
-        dispatch(getShipment(id))
+        dispatch(getShipment(id)).then(() => {
+            dispatch(getLogs(id))
+        })
     }, [])
 
     if (shipment)
@@ -37,9 +36,9 @@ const View = () => {
                         <ShipmentViewMap allPlaces={shipment.subShipping} />
                     </div>
                     <div className="w-1/5 h-full">
-                        <h3 className="text-2xl font-medium">Important Logs</h3>
+                        <h3 className="text-2xl font-medium">Shipment Logs</h3>
                         <ScrollArea className="w-full h-full space-y-2">
-                            {tags}
+                            {logs.map((log) => <Log key={log._id} log={log} />)}
                         </ScrollArea>
                     </div>
                 </div>
@@ -56,7 +55,11 @@ const View = () => {
                         </div>
                         <div className="flex space-x-4 items-center">
                             <h5 className="opacity-60">Dates</h5>
-                            <p className="text-xl font-medium">{moment(Date(shipment.startDate)).format("MMM Do YY")} - {moment(Date(shipment.startDate)).format("MMM Do YY")}</p>
+                            <p className="text-xl font-medium">{moment(shipment.startDate).format("MMMM Do YYYY, h:mm")} - {moment(shipment.eta).format('MMMM Do YYYY, h:mm')}</p>
+                        </div>
+                        <div className="flex space-x-4 items-center">
+                            <h5 className="opacity-60">Shipment Status: </h5>
+                            <p className="text-xl font-medium">{shipment.status}</p>
                         </div>
                     </div>
                     <div className='flex flex-col justify-between relative my-5 '>
@@ -84,6 +87,16 @@ const View = () => {
                             return (
                                 <div className="py-4" key={index}>
                                     <h4 className="text-2xl font-medium border-b-2 p-2">Sub-Shipment - {index + 1}</h4>
+                                    <div className="space-y-2 mt-2">
+                                        <div className="flex space-x-4 items-center">
+                                            <h5 className="opacity-60">Date: </h5>
+                                            <p className="text-xl font-medium">{moment(shipment.startDate).format("MMMM Do YYYY, h:mm")} - {moment(shipment.eta).format('MMMM Do YYYY, h:mm')}</p>
+                                        </div>
+                                        <div className="flex space-x-4 items-center">
+                                            <h5 className="opacity-60">Status: </h5>
+                                            <p className="text-xl font-medium">{shipment.status}</p>
+                                        </div>
+                                    </div>
                                     <StepperComp origin={shipment.origin} destination={shipment.destination} status={shipment.status} distanceAndDuration={shipment.direction.distanceAndDuration} />
                                     <h4 className="text-2xl font-medium mb-2">All Vehicles</h4>
                                     <Table columns={shippingVehicleViewColumn} data={shipment.vehicles} />
