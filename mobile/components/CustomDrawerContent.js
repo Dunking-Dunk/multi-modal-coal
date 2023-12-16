@@ -6,7 +6,7 @@ import {
 import { Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setUser } from "../store/AuthReducer";
+import { setUser } from "../store/MainReducer";
 import { useDispatch } from "react-redux";
 import axios from "../api/axios";
 

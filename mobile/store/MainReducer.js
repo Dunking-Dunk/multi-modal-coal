@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import api from '../api/axios'
 
 export const getVehicle = createAsyncThunk('main/getAllVehicle', async (body, thunkAPI) => {
     try {
-       
         const vehicles = await api.get(`/vehicles/driver/${body}`)
-        console.log(vehicles)
         const data = vehicles.data;
         return data;
     } catch (err) {
@@ -26,6 +25,17 @@ export const getPlaces = createAsyncThunk('main/getAllPlaces', async (body, thun
     }
 })
 
+export const getAllDriverShipments = createAsyncThunk('main/getAllDriverShipments', async (body, thunkAPI) => {
+    try {
+        const vehicles = await api.get(`/shipments/vehicle/${body}`)
+        const data = vehicles.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
 const authReducer = createSlice({
     name: 'main',
     initialState: {
@@ -59,6 +69,16 @@ const authReducer = createSlice({
             state.loading = false
         })
         builder.addCase(getPlaces.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(getAllDriverShipments.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getAllDriverShipments.fulfilled, (state, action) => {
+            state.shipments = action.payload.shipments
+            state.loading = false
+        })
+        builder.addCase(getAllDriverShipments.rejected, (state, action) => {
             state.loading = false
         })
     }

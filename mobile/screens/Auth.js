@@ -4,7 +4,6 @@ import LoginScreen from "./Login.js"
 
 const Stack = createStackNavigator()
 
-
 const AuthStack = () => {
     return (
         <Stack.Navigator initialRouteName='Login' screenOptions={{

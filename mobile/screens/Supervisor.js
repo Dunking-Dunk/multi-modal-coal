@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 const SupervisorScreen = ({ navigation }) => {
     const { places } = useSelector((state) => state.Main)
-    console.log(places)
+    
     return (
         <View>
             <Header navigation={navigation}/>

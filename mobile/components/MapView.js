@@ -19,7 +19,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const Map = ({places}) => {
     const mapRef = useRef();
     const markerRef = useRef()
-    const userPosition = useSelector((state) => state.auth.location) 
+    const userPosition = useSelector((state) => state.Main.location) 
 
     useEffect(() => {
       if (userPosition) {

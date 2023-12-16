@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import api from '../api/axios.js'
 import CustomButton from '../components/CustomButton'
 import InputField from '../components/InputField'
-import { setUser } from '../store/AuthReducer'
+import { setUser } from '../store/MainReducer.js'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const LoginScreen = ({navigation}) => {
@@ -20,7 +20,7 @@ const LoginScreen = ({navigation}) => {
      
       if (res.data.user.role === 'supervisor' || res.data.user.role === 'driver') {
         await AsyncStorage.setItem('userToken', res.data.token)
-        dispatch(setUser(res.data))
+        dispatch(setUser(res.data.user))
         navigation.navigate('main')
       } else {
         setError('only drivers and supervisor can login')

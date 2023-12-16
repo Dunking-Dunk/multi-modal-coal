@@ -27,7 +27,7 @@ const Vehicle = () => {
     }, [vehicles])
 
     return (
-        <div className="pb-10">
+        <div className="pb-2">
             <VehicleHeader />
             <Routes>
                 <Route element={<Dashboard />} path='/' />

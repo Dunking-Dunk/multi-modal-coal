@@ -8,6 +8,7 @@ import ErrorThrower from '../utils/Error.js'
 
 const router = express.Router()
 
+
 //get vehicles
 router.get('/', authenticatedUser,async (req, res) => {
     const {vehicle} = req.query
@@ -86,7 +87,6 @@ router.delete('/:id',authenticatedUser, async (req, res) => {
         })
     }
 
-
      await Vehicle.findByIdAndDelete(id)
 
     res.status(200).json({
@@ -95,10 +95,9 @@ router.delete('/:id',authenticatedUser, async (req, res) => {
     })
 })
 
-router.get('/driver/:id', authenticatedUser, async (req, res,next) => {
-    const vehicle = await Vehicle.find({ driver: req.params.id })
-        console.log(req.params.id)
-        
+router.get('/driver/:id',authenticatedUser, async(req, res, next) => {
+    const vehicle = await Vehicle.findOne({ driver: req.params.id })
+       
     if (!vehicle)
         return next(new ErrorThrower('No Vehicle found'))
 
@@ -107,5 +106,6 @@ router.get('/driver/:id', authenticatedUser, async (req, res,next) => {
         vehicle
     })
 })
+
 
 export default router
