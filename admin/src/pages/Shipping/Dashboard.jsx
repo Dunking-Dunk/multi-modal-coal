@@ -14,9 +14,9 @@ const Dashboard = () => {
                     <Map />
                 </div>
                 <div className="flex flex-row space-x-2">
-                    <CardOverview title='shipments' description='Total Number of shipments' value={shipments.length} />
-                    <CardOverview title='Active shipments' description='Total Number of Active shipments' value={shipments.length} />
-                    <CardOverview title='Completed Shipments' description='Total Number of Shipment completed' value={shipments.length} />
+                    <CardOverview title='Shipments' description='Total Number of Shipments' value={shipments.length} />
+                    <CardOverview title='Active shipments' description='Total Number of Active Shipments' value={shipments.length} />
+                    <CardOverview title='Completed Shipments' description='Total Number of Shipment Completed' value={shipments.length} />
                 </div>
             </div>
 
