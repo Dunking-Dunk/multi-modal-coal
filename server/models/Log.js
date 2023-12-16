@@ -12,7 +12,7 @@ const logsSchema = new mongoose.Schema({
         id: mongoose.Schema.Types.ObjectId,
         ref: {
             type: String,
-            enum:  ['vehicle', 'shipping', 'place']
+            enum:  ['vehicle', 'shipping', 'place','subshipping']
         },
     }]
 }, {

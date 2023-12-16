@@ -4,6 +4,7 @@ import { authenticatedUser } from '../middleware/Auth.js'
 import Vehicle from '../models/Vehicle.js'
 import Place from '../models/Place.js'
 import User from '../models/User.js'
+import ErrorThrower from '../utils/Error.js'
 
 const router = express.Router()
 
@@ -91,6 +92,19 @@ router.delete('/:id',authenticatedUser, async (req, res) => {
     res.status(200).json({
         success: true,
         id
+    })
+})
+
+router.get('/driver/:id', authenticatedUser, async (req, res,next) => {
+    const vehicle = await Vehicle.find({ driver: req.params.id })
+        console.log(req.params.id)
+        
+    if (!vehicle)
+        return next(new ErrorThrower('No Vehicle found'))
+
+    res.status(200).json({
+        success: true,
+        vehicle
     })
 })
 

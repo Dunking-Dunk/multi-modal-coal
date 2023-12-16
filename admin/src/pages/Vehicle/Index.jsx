@@ -21,7 +21,7 @@ const Vehicle = () => {
         if (vehicles) {
             socket.getAllVehiclesLocations("allVehicles")
             return () => {
-                socket.stopAllVehicleLocations("allVehicles")
+                socket.leaveRoom("allVehicles")
             }
         }
     }, [vehicles])

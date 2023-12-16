@@ -348,6 +348,7 @@ export const vehicleShippingColumn = [
   {
     accessorKey: "origin.place.name",
     header: "Origin",
+
   },
   {
     accessorKey: "destination.place.name",

@@ -60,7 +60,7 @@ router.post('/create', authenticatedUser, async (req, res, next) => {
 })
 
 
-  router.get('/assigndriver', async(req, res) => {
+  router.get('/assigndriver', authenticatedUser, async(req, res) => {
 
     const drivers = await User.find({role: 'driver', vehicle: null})
     res.status(200).json({
@@ -68,7 +68,7 @@ router.post('/create', authenticatedUser, async (req, res, next) => {
       drivers
     })
   })
-  router.get('/assignsupervisor', async(req, res) => {
+  router.get('/assignsupervisor',authenticatedUser, async(req, res) => {
 
     const supervisor = await User.find({role: 'supervisor', supervisor: null})
     res.status(200).json({
@@ -80,7 +80,7 @@ router.post('/create', authenticatedUser, async (req, res, next) => {
 
   router.post("/login", async (req, res, next) => {
     const { password, email } = req.body;
-  
+    console.log(req.body)
     if (!password || !email)
       return next(new Error("Please enter email and password", 400));
   
@@ -195,7 +195,6 @@ router.delete('/:id', authenticatedUser, async (req, res) => {
     id
   })
 })
-
 
 
 export default router

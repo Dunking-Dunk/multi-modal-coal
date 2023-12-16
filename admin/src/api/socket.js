@@ -2,7 +2,8 @@ import { io } from "socket.io-client";
 import store from '../store/reducer/store'
 
 import {setTracker} from '../store/reducer/VehicleReducer'
-import { setNotification } from "../store/reducer/LogReducer";
+import { addLog, setNotification } from "../store/reducer/LogReducer";
+import { setShipment } from "../store/reducer/ShipmentReducer";
 
 class Socket {
     constructor() {
@@ -15,7 +16,7 @@ class Socket {
             transports: ["websocket"],
         };
         this.createConnection()
-        this.getLog()
+        this.getLog('log')
     }
 
     createConnection() {
@@ -34,30 +35,46 @@ class Socket {
         });
     }
 
-          stopAllVehicleLocations(room) {
-        this.socket.emit("leave-room", room)
-      }
-
     getVehicleLocation(room, setVehicle) {
         this.socket.emit("join-room",room);
         this.socket.on("getVehicleLocation", (data) => {
           setVehicle(data)
         });
     }
-    
-          stopVehicleLocation(room) {
-        this.socket.emit("leave-room", room);
-      }
 
-    getLog() {
-        this.socket.emit("join-room", 'log')
+    getLog(room) {
+        this.socket.emit("join-room", room)
         this.socket.on('getLog', (data) => {
-            console.log(data)
             store.dispatch(setNotification(data))
         })
     } 
 
+    getIndividualLog(room) {
+        this.socket.emit("join-room", room)
+        this.socket.on('getLog', (data) => {
+                store.dispatch(addLog(data))
+        })
+    }
+
+    leaveRoom(room) {
+        this.socket.emit("leave-room", room);
+    }
+
+    getShipment(room) {
+        this.socket.emit("join-room", room)
+        this.socket.on('getShipment', (data) => {
+            console.log(data)
+            store.dispatch(setShipment(data))
+        })
+    }
   
+    
+    // stopAllVehicleLocations(room) {
+    //     this.socket.emit("leave-room", room)
+    //   }
+    // stopVehicleLocation(room) {
+    //     this.socket.emit("leave-room", room);
+    //   }
 
     //   getUpdatedStop() {
     //     this.socket.on("updateStop", (data) => {
@@ -75,7 +92,6 @@ class Socket {
         this.socket.disconnect()
         console.log('disconnected')
     }
-
 
     errorConnection() {
         this.socket.on("connect_error", (err) => {

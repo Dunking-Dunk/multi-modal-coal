@@ -39,7 +39,10 @@ const logReducer = createSlice({
     reducers: {
         setNotification: (state, action) => {
             state.log = action.payload
-        } 
+        },
+        addLog: (state, action) => { 
+            state.logs.shift(action.payload)
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getAllLogs.pending, (state, action) => {
@@ -66,6 +69,6 @@ const logReducer = createSlice({
     }
 })
 
-export const { setNotification } = logReducer.actions
+export const { setNotification,addLog } = logReducer.actions
 
 export default logReducer.reducer

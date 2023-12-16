@@ -30,7 +30,7 @@ router.get('/all/:id', authenticatedUser, async (req, res) => {
     const { id } = req.params
 
     const logs = await Log.find({ reference: { $elemMatch: { id: id } }})
-    console.log(logs)
+    
     res.status(200).json({
         success: true,
         logs

@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MarkerF, Polyline } from "@react-google-maps/api";
 import { forEach } from "lodash";
 import { useSelector } from "react-redux";
 
 import Map from "./Map";
 import VehicleMarker from "./VehicleMarker";
-import socket from "../../api/socket";
 import { map } from 'lodash'
 
 const ShipmentView = ({ allPlaces }) => {
     const [routes, setRoutes] = useState()
+    const polygonRef = useRef()
     const { vehicles } = useSelector((state) => state.Vehicle)
 
     useEffect(() => {
@@ -19,14 +19,6 @@ const ShipmentView = ({ allPlaces }) => {
         })
         setRoutes(routes)
     }, [allPlaces])
-
-    useEffect(() => {
-        socket.getAllVehiclesLocations("allVehicles")
-
-        return () => {
-            socket.stopAllVehicleLocations("allVehicles")
-        }
-    }, [])
 
     return (
         <Map>
@@ -40,9 +32,7 @@ const ShipmentView = ({ allPlaces }) => {
                             return <VehicleMarker vehicle={current} key={vehicle._id} />
                         })}
                     </React.Fragment>
-
                 )
-
             })}
 
             <MarkerF position={{ lat: allPlaces[allPlaces.length - 1].destination.location.coordinate[1], lng: allPlaces[allPlaces.length - 1].destination.location.coordinate[0] }} />
@@ -51,13 +41,13 @@ const ShipmentView = ({ allPlaces }) => {
 
                 return (
                     <Polyline
+                        ref={polygonRef}
                         key={index}
                         path={polyLine}
                         options={{
                             strokeColor: '#F94C10',
                             strokeOpacity: allPlaces[index]?.status === 'dispatched' ? 1 : 0.2,
                             strokeWeight: 3,
-
                         }} />
                 )
             })

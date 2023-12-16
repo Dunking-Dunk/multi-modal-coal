@@ -1,12 +1,12 @@
 export const getDistanceAndTime = (a) => {
-    let totalDistance = 0;
+    let totalDist = 0;
     let totalTime = 0;
 
     a.forEach((stop) => {
-        totalDistance += stop.distance,
+        totalDist += stop.distance,
             totalTime += stop.duration
     })
-    totalDistance = `${(totalDistance / 1000).toFixed(2)} Km `
+    let totalDistance = `${(totalDist / 1000).toFixed(2)} Km `
     const hours = (totalTime / (60 * 60));
     const rhours = Math.floor(hours);
 
@@ -16,6 +16,6 @@ export const getDistanceAndTime = (a) => {
     let totalTimeTaken = `${rhours} hours ${rminutes} minutes`
 
     return {
-        totalDistance, totalTimeTaken, totalTime
+        totalDistance, totalTimeTaken, totalTime, totalDist
     }
 }

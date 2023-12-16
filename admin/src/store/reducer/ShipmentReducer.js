@@ -56,6 +56,9 @@ const ShipmentReducer = createSlice({
         shipment: null
     },
     reducers: {
+        setShipment: (state, action) => {
+            state.shipment = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getAllShipments.pending, (state, action) => {
@@ -101,4 +104,5 @@ const ShipmentReducer = createSlice({
     }
 })
 
+export const {setShipment} = ShipmentReducer.actions
 export default ShipmentReducer.reducer

@@ -87,5 +87,17 @@ router.delete('/:id',authenticatedUser, async (req, res) => {
     })
 })
 
+router.get('/supervisor/:id', authenticatedUser, async (req, res, next) => {
+    const place = await Place.find({ supervisor: req.params.id })
+    
+    if (!place)
+        return next(new ErrorThrower('No Place found'))
+
+    res.status(200).json({
+        success: true,
+        place
+    })
+})
+
 
 export default router

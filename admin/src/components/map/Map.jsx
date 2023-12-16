@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 
 // import { darkMap } from '@/lib/mapTheme'
 import { GoogleMap } from '@react-google-maps/api';
@@ -9,6 +9,13 @@ const MapView = (props) => {
         lat: 13.078339,
         lng: 80.180592
     });
+    const options = useMemo(() => ({
+        mapId: "28fbb85fa828483f",
+        disableDefaultUI: true,
+        clickableIcons: false
+    }),
+        []
+    )
 
     function handleLoad(map) {
         mapRef.current = map;
@@ -31,10 +38,7 @@ const MapView = (props) => {
                 center={position}
                 mapContainerClassName="map-container"
                 {...props}
-                options={{
-                    mapId: "28fbb85fa828483f",
-                }}
-
+                options={options}
             >
                 {props.children}
             </GoogleMap>
@@ -42,4 +46,4 @@ const MapView = (props) => {
     )
 }
 
-export default memo(MapView)
+export default MapView

@@ -14,6 +14,7 @@ import Table from '../../components/DataTable'
 import StepperComp from "../../components/Stepper";
 import { getLogs } from "../../store/reducer/LogReducer";
 import Log from "../../components/Log";
+import socket from "../../api/socket";
 
 const View = () => {
     const { id } = useParams()
@@ -25,6 +26,14 @@ const View = () => {
         dispatch(getShipment(id)).then(() => {
             dispatch(getLogs(id))
         })
+        socket.getIndividualLog(id)
+        socket.getAllVehiclesLocations("allVehicles")
+        socket.getShipment(id)
+
+        return () => {
+            socket.leaveRoom("allVehicles")
+            socket.leaveRoom(id)
+        }
     }, [dispatch, id])
 
     if (shipment)
@@ -97,7 +106,7 @@ const View = () => {
                                             <p className="text-xl font-medium">{shipment.status}</p>
                                         </div>
                                     </div>
-                                    <StepperComp origin={shipment.origin} destination={shipment.destination} status={shipment.status} distanceAndDuration={shipment.direction.distanceAndDuration} />
+                                    <StepperComp shipment={shipment} />
                                     <h4 className="text-2xl font-medium mb-2">All Vehicles</h4>
                                     <Table columns={shippingVehicleViewColumn} data={shipment.vehicles} />
                                 </div>
