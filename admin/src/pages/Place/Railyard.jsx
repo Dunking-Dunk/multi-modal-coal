@@ -11,7 +11,7 @@ const Railyard = () => {
     return (
         <div className="flex flex-col space-y-4 w-full h-full">
             <h1 className="text-4xl font-bold">Railyard</h1>
-            <div className="h-[600px] w-5/6">
+            <div className="h-[65vh] w-5/6">
                 <PlaceView places={railyard} railroutes={railroute} />
             </div>
             <h3 className="text-4xl font-bold">Manage Railyards</h3>

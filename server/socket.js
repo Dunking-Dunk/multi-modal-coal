@@ -34,12 +34,16 @@ async function checkVehiclePlaceIntersection(subShipments, vehicle) {
                     }
                 ]
             })
-
-            if (subShipments[subShipments.length - 1].status === 'completed') { 
-                await Shipping.findByIdAndUpdate(subShipments[subShipments.length - 1].shipment, {
-                    status: 'completed',
-                })
-            }
+            if (shipment.status === 'completed') { 
+                const mainShipment = await Shipping.findById(String(shipment.shipment)).populate('subShipping')
+                if (mainShipment.subShipping[mainShipment.subShipping.length - 1].status === 'completed' && mainShipment.status !== 'completed') {
+                    mainShipment.set({
+                        status: 'completed',
+                        quantity: 2000
+                    })
+                    await mainShipment.save()
+                }
+            }   
         }
   
         if (originDistance > 1 && shipment.status === 'processing') {
@@ -113,11 +117,6 @@ export const connection = () => {
         const fullDocument = data.fullDocument
         if (data.operationType === 'update') {
             io.to('allVehicles').emit('getAllVehicleLocation', fullDocument)
-            // if (fullDocument.type) {
-            //     const typeVehicles = await Vehicle.find({ type: fullDocument.type })
-             
-            //     io.to(fullDocument.type).emit('getAllVehicleLocation',typeVehicles)
-            // }
         }
     })
 
@@ -150,8 +149,9 @@ export const connection = () => {
                 , populate: {
                 path: 'destination.place',
                 model: 'Place'
-            }})
-            io.to(fullDocument.shipment).emit('getShipment', shipment)
+                }
+            })
+            io.to(String(fullDocument.shipment)).emit('getShipment', shipment)
         }
     })
 
@@ -176,8 +176,7 @@ export const connection = () => {
                 model: 'Place'
                 }
             })
-            
-            io.to(String(fullDocument._id)).emit('getShipment', shipment)
+            io.to(String(shipment._id)).emit('getShipment', shipment)
         }
     })
 }

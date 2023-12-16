@@ -6,8 +6,20 @@ import Dashboard from "./Dashboard";
 import CreateShipment from "./Create";
 import ManageShipment from "./Manage";
 import ViewShipment from './View'
+import { useEffect } from "react";
+import socket from "../../api/socket";
 
 const Index = () => {
+
+    useEffect(() => {
+        socket.getAllVehiclesLocations("allVehicles")
+
+        return () => {
+            socket.leaveRoom('allVehicles')
+        }
+    }, [])
+
+
     return (
         <div className="pb-10">
             <ShipmentHeader />

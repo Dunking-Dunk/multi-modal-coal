@@ -6,9 +6,8 @@ import Log from  '../models/Log.js'
 
 const router = express.Router()
 
-
 router.get('/', async(req,res) => {
-    const shipments = await Shipping.find({}).populate('origin.place').populate('destination.place')
+    const shipments = await Shipping.find({}).sort({createdAt: -1}).populate('origin.place').populate('destination.place')
 
     res.status(200).json({
         success: true,
@@ -87,6 +86,15 @@ router.post('/', async (req, res) => {
     })
 })
 
+router.get('/subshipments', async (req, res) => {
+    const shipments = await SubShipping.find({}).populate('origin.place').populate('destination.place')  
+
+    res.status(200).json({
+        success: true,
+        shipments
+    })
+})
+
 router.get('/:id', async (req, res) => {
     const {id} = req.params
     const shipment = await Shipping.findById(id).populate('subShipping').populate({
@@ -136,6 +144,7 @@ router.delete('/:id', async (req, res) => {
     })
 })
 
+
 router.get('/vehicle/validateform', async(req,res) => {
     const startDate = new Date(req.query.start)
     const eta = new Date(req.query.eta)
@@ -155,8 +164,6 @@ router.get('/vehicle/validateform', async(req,res) => {
                     const present = filteredVehicle.findIndex(a => a._id === vehicle._id)
                     if (present === -1)
                         filteredVehicle.push(vehicle)
-                    
-                    
                 }
            }
         } else {
@@ -172,9 +179,11 @@ router.get('/vehicle/validateform', async(req,res) => {
     })
 })
 
+
+
 router.get('/vehicle/:id', async (req, res) => {
     const {id} = req.params
-    const shipments = await SubShipping.find({ vehicles: {$in: id} }).populate('origin.place').populate('destination.place')
+    const shipments = await SubShipping.find({ vehicles: {$in: id} }).sort({startDate: -1}).populate('origin.place').populate('destination.place')
     
     res.status(200).json({
         success: true,
@@ -185,13 +194,14 @@ router.get('/vehicle/:id', async (req, res) => {
 
 router.get('/place/:id', async (req, res) => { 
     const {id} = req.params
-    const shipments = await SubShipping.find({ $or: [{'origin.place':  id}, {'destination.place': id}]}).populate('origin.place').populate('destination.place')
+    const shipments = await SubShipping.find({ $or: [{'origin.place':  id}, {'destination.place': id}]}).sort({startDate: -1}).populate('origin.place').populate('destination.place')
     
     res.status(200).json({
         success: true,
         shipments
     })
 })
+
 
 
 

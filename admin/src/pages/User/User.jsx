@@ -17,7 +17,7 @@ const User = () => {
                     <Link to='create' className='flex items-center justify-center hover:-translate-y-2 transition-all w-full h-full'>Create</Link>
                 </Button>
             </div>
-            <DataTable columns={userColumn} data={users} />
+            <DataTable columns={userColumn} data={users} filterColumn={'name'} />
         </div>
     )
 }

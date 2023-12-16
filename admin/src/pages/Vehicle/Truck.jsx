@@ -24,7 +24,7 @@ const Truck = () => {
                     </Button>
                 </div>
                 <h1 className="text-4xl font-bold">Manage Trucks</h1>
-                <DataTable columns={VehicleColumn} data={trucks} />
+                <DataTable columns={VehicleColumn} filterColumn={'registerNumbers'} data={trucks} />
             </div>
         )
 
@@ -34,7 +34,7 @@ const Truck = () => {
 
             <h1 className="text-4xl font-bold">Trucks</h1>
             <div className="flex flex-row space-x-4">
-                <div className="w-5/6 h-[600px]">
+                <div className="w-5/6 h-[65vh]">
                     <AllVehiclesView type={'truck'} />
                 </div>
                 <div className="flex flex-col space-y-4 w-1/6">

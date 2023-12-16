@@ -6,34 +6,47 @@ import { getPlace, getPlaceShipments } from "../../store/reducer/PlaceReducer";
 import CardOverview from "../../components/OverviewCard";
 import { Card } from '@/components/ui/Card'
 
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { placeShippingColumn } from '../../lib/columns'
 import PlaceView from "../../components/map/PlaceView";
 import Table from '@/components/DataTable'
+import Log from "../../components/Log";
+import { getLogs } from "../../store/reducer/LogReducer";
+import socket from "../../api/socket";
+
 
 const ViewPlace = () => {
     const { id } = useParams()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    const { logs } = useSelector((state) => state.Log)
     const { place } = useSelector((state) => state.Place)
 
     useEffect(() => {
         dispatch(getPlace(id)).then(() => {
             dispatch(getPlaceShipments(id))
+            dispatch(getLogs(id))
         })
-    }, [])
 
-    console.log(place)
+        socket.getIndividualLog(id)
+
+        return () => {
+            socket.leaveRoom(id)
+        }
+    }, [])
 
     if (place) {
         return (
             <div className="flex flex-col space-y-4 mt-10 ">
-                <div className="flex flex-row gap-x-4 w-full h-[600px]">
-                    <div className="w-4/5 h-full">
+                <div className="flex flex-row gap-x-4 w-full h-[65vh]">
+                    <div className="w-5/6 h-full">
                         <PlaceView places={[place]} place={true} />
                     </div>
-                    <div className="flex flex-col w-1/4 gap-y-2 h-full">
-
+                    <div className="flex flex-col w-1/6 gap-y-2 h-full">
+                        <h3 className="text-2xl font-medium">Shipment Logs</h3>
+                        <ScrollArea className="w-full h-full space-y-2">
+                            {logs.map((log) => <Log key={log._id} log={log} />)}
+                        </ScrollArea>
                     </div>
                 </div>
                 <div className="flex flex-col space-y-2">

@@ -41,8 +41,8 @@ const ViewVehicle = () => {
     if (vehicle) {
         return (
             <div className="space-y-4 mt-10 w-full h-full">
-                <div className="flex flex-row gap-x-4 w-full h-full">
-                    <div className="w-full h-[70vh]">
+                <div className="flex flex-row gap-x-4 w-full h-[70vh]">
+                    <div className="w-full h-full">
                         <VehicleMap tracker={tracker} vehicle={vehicle} />
                     </div>
                     <div className="flex flex-col w-1/4 gap-y-2 h-full">

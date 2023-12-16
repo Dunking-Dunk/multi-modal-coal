@@ -1,5 +1,5 @@
 import React from "react"
-import { MarkerF, OverlayViewF, OverlayView, Polyline } from '@react-google-maps/api'
+import { MarkerF, OverlayViewF, OverlayView } from '@react-google-maps/api'
 
 
 function getPixelPositionOffset(width, height) {
