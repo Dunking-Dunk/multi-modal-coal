@@ -11,7 +11,7 @@ const Port = () => {
     return (
         <div className="flex flex-col space-y-4 w-full h-full">
             <h1 className="text-4xl font-bold">Port</h1>
-            <div className="w-5/6 h-[600px]">
+            <div className="w-5/6 h-[65vh]">
                 <PlaceView places={port} />
             </div>
             <h3 className="text-4xl font-bold">Manage Ports</h3>

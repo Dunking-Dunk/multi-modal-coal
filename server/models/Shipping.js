@@ -55,18 +55,12 @@ const subShippingSchema = new mongoose.Schema({
             }
         ],
     },
-    dispatch: {
-        type: Boolean,
-        default: false
-    },
-    arrived: {
-        type: Boolean,
-        default: false
-    },
     railRoute: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Railroute'
     }
+}, {
+    timestamps: true,
 })
 
 const shippingSchema = new mongoose.Schema({

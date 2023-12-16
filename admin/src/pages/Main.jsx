@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { getAllUsers } from '../store/reducer/UserReducer';
 import { getAllPlaces, getAllRailroute } from '../store/reducer/PlaceReducer';
 import { getAllVehicle } from '../store/reducer/VehicleReducer';
-import { getAllShipments } from '../store/reducer/ShipmentReducer';
+import { getAllShipments, getAllSubShipments } from '../store/reducer/ShipmentReducer';
 import { getAllLogs } from '../store/reducer/LogReducer';
 
 const Main = () => {

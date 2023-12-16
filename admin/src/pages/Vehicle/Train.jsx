@@ -35,7 +35,7 @@ const Train = () => {
         <div className="flex flex-col space-y-4 w-full h-full">
             <h1 className="text-4xl font-bold">Trains</h1>
             <div className="flex flex-row space-x-4">
-                <div className="w-5/6 h-[600px]">
+                <div className="w-5/6 h-[65vh]">
                     <AllVehiclesView railroutes={railroute} type='train' />
                 </div>
                 <div className="flex flex-col space-y-4 w-1/6">

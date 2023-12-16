@@ -49,11 +49,25 @@ export const deleteShipment = createAsyncThunk('shipment/deleteShipment', async 
     }
 })
 
+export const getAllSubShipments = createAsyncThunk('shipment/getAllSubShipments',async (body, thunkAPI) => {
+    try {
+        const shipments = await api.get(`/shipments/subshipments`)
+        
+        const data = shipments.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
 const ShipmentReducer = createSlice({
     name: 'shipment',
     initialState: {
         shipments: [],
-        shipment: null
+        shipment: null,
+        subShipments: []
     },
     reducers: {
         setShipment: (state, action) => {
@@ -85,7 +99,7 @@ const ShipmentReducer = createSlice({
             state.loading = true
         })
         builder.addCase(createShipment.fulfilled, (state, action) => {
-            state.shipments.push(action.payload.shipment)
+            state.shipments.shift(action.payload.shipment)
             state.loading = false
         })
         builder.addCase(createShipment.rejected, (state, action) => {
@@ -99,6 +113,16 @@ const ShipmentReducer = createSlice({
             state.loading = false
         })
         builder.addCase(deleteShipment.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(getAllSubShipments.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getAllSubShipments.fulfilled, (state, action) => {
+            state.subShipments = action.payload.shipments
+            state.loading = false
+        })
+        builder.addCase(getAllSubShipments.rejected, (state, action) => {
             state.loading = false
         })
     }

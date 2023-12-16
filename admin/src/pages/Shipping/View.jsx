@@ -27,11 +27,9 @@ const View = () => {
             dispatch(getLogs(id))
         })
         socket.getIndividualLog(id)
-        socket.getAllVehiclesLocations("allVehicles")
         socket.getShipment(id)
 
         return () => {
-            socket.leaveRoom("allVehicles")
             socket.leaveRoom(id)
         }
     }, [dispatch, id])
@@ -39,8 +37,8 @@ const View = () => {
     if (shipment)
         return (
             <div className="mt-10 space-y-5">
-                <h1 className="text-4xl font-bold">Detailed Shipment View</h1>
-                <div className="flex flex-row space-x-4 w-full h-[700px]">
+                <h1 className="text-4xl font-bold">Shipment</h1>
+                <div className="flex flex-row space-x-4 w-full h-[65vh]">
                     <div className="w-4/5 h-full">
                         <ShipmentViewMap allPlaces={shipment.subShipping} />
                     </div>

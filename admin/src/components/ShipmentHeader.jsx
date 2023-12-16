@@ -15,7 +15,7 @@ const ShipmentHeader = () => {
                 <NavigationMenuList>
                     <NavigationMenuItem className='px-10'>
                         <NavigationLink href='/shipping' className='text-xl'>
-                            Shipment
+                            Shipments
                         </NavigationLink>
                     </NavigationMenuItem>
                     <NavigationMenuItem className='px-10'>

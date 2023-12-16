@@ -34,7 +34,7 @@ const Ship = () => {
 
             <h1 className="text-4xl font-bold">Ships</h1>
             <div className="flex flex-row space-x-4">
-                <div className="w-5/6 h-[600px]">
+                <div className="w-5/6 h-[65vh]">
                     <AllVehiclesView type={'ship'} />
                 </div>
                 <div className="flex flex-col space-y-4 w-1/6">

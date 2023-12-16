@@ -29,7 +29,7 @@ router.get('/', authenticatedUser, async (req, res) => {
 router.get('/all/:id', authenticatedUser, async (req, res) => {
     const { id } = req.params
 
-    const logs = await Log.find({ reference: { $elemMatch: { id: id } }})
+    const logs = await Log.find({ reference: { $elemMatch: { id: id } }}).sort({createdAt: -1})
     
     res.status(200).json({
         success: true,
