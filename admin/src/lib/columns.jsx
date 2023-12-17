@@ -440,3 +440,26 @@ export const placeShippingColumn = [
     },
   },
 ]
+
+
+export const ShippingColDash = [
+
+  {
+    accessorKey: "origin.place.name",
+    header: "Origin",
+  },
+  {
+    accessorKey: "destination",
+    header: "Destination",
+    cell: ({ row }) => {
+      const place = row.getValue("destination");
+
+      return place.place?.name ? place.place?.name : place.customPlace.name
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Shipment Status",
+  },
+
+];
