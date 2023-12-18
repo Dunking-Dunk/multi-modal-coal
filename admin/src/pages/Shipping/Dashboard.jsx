@@ -15,17 +15,13 @@ const Dashboard = () => {
     return (
         <div className="w-full">
             <div className="space-y-4">
-            <h1 className='text-4xl font-bold my-2'>Active Shipments</h1>
-            <p className="text-xs text-muted-foreground">
-                  List of all the statistics of the ongoing Shipments can be found here
-                </p>
                 <div className="flex flex-row space-x-2 pt-4">
                     <CardOverview title='Shipments' description='Total Number of Shipments' value={shipments.length} />
                     <CardOverview title='Sub Shipments' description='Total Number of Sub-Shipments' value={subShipments.length} />
                     <CardOverview title='Active shipments' description='Total Number of Active shipments' value={shipments.length} />
                     <CardOverview title='Completed Shipments' description='Total Number of Completed Shipments' value={shipments.length} />
                 </div>
-                
+                <h1 className='text-4xl font-bold my-2'>Active Shipments</h1>
                 <div className="w-full h-[700px]">
                     <AllShipmentsMap subShipments={subShipments} />
                 </div>

@@ -128,8 +128,8 @@ const getHeatMapData = () => {
         <ComposableMap
           projectionConfig={PROJECTION_CONFIG}
           projection="geoMercator"
-          width={600}
-          height={220}
+          // width={max}
+          // height={"400px"}
           data-tip=""
         >
           <Geographies geography={INDIA_TOPO_JSON}>
