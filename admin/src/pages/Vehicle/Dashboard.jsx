@@ -1,6 +1,13 @@
 import React from "react";
 import { useSelector } from 'react-redux'
-
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 import DataTable from "../../components/DataTable";
 import { VehicleColumn } from "../../lib/columns";
 import CardOverview from "../../components/OverviewCard";
@@ -26,9 +33,7 @@ const Dashboard = () => {
                 <h3 className="text-3xl font-semibold">Manage All Vehicles</h3>
                 <DataTable columns={VehicleColumn} data={vehicles} filterColumn='registerNumber' />
             </div>
-
         </div>
-
     )
 }
 
