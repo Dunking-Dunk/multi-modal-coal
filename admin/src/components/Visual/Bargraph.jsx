@@ -28,20 +28,25 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Bar Chart',
+      text: 'Mode wise despatches of raw coal (',
     },
   },
 };
 
-const labels = ['Truck', 'Train', 'Ship'];
+const labels = ['Road', 'Rail', 'Inland & Coastal'];
 
 export const data = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
+      label: 'Previous Month',
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+    {
+      label: 'Current Month',
+      data: labels.map(() => faker.datatype.number({ min: 0, max: 100 })),
+      backgroundColor: 'rgba(230, 81, 0, 0.5)',
     }
   ],
 };
