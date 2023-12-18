@@ -123,8 +123,7 @@ const ViewVehicle = () => {
                                     <CardHeader>
                                         <CardTitle>Recent Shipments</CardTitle>
                                         <CardDescription>
-                                        <Bargraph
-                                        />
+                                        <Bargraph/>
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
