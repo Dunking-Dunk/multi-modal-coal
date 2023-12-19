@@ -35,6 +35,8 @@ export const options = {
 
 const labels = ['Road', 'Rail', 'Inland & Coastal'];
 
+
+
 export const data = {
   labels,
   datasets: [
@@ -51,6 +53,16 @@ export const data = {
   ],
 };
 
+export const mileageData = {
+  labels,
+  datasets: [
+    {
+      label: 'Mileage',
+      data: labels.map(() => faker.datatype.number({ min: 100, max: 500 })),
+      backgroundColor: 'rgba(75, 192, 192, 0.5)', // You can change the color as needed
+    }
+  ],
+};
 export function Bargraph() {
   return <Bar options={options} data={data} />;
 }

@@ -70,6 +70,7 @@ const ViewVehicle = () => {
                     <CardOverview title='Fuel' description={"Fuel level of the vehicle"} value={tracker.fuelLevel} />
                     <CardOverview title='Type' description={"Vehicle Type"} value={vehicle.type} />
                     <CardOverview title='Register Number' description={"Vehicle Registration Number"} value={vehicle.registerNumber} />
+                    <CardOverview title='Capacity' description={"Vehicle Coal holding capacity"} value={vehicle.capacity} />
                 </div>
                 <div className="flex space-x-2">
                     {vehicle.driver && (
@@ -92,6 +93,48 @@ const ViewVehicle = () => {
                     <CardOverview title='Make' description={"Vehicle Make"} value={vehicle.make} />
                     <CardOverview title='Model' description={"Vehicle Model"} value={vehicle.model} />
                     <CardOverview title='Tracker ID' description={"Vehicle Tracker ID related to iot module"} value={vehicle.trackerId} />
+                </div>
+                <div className="pt-6">
+                    <h1 className="text-4xl font-bold border-b-2">Dashboard</h1>
+                    <h3 className="text-2xl font-semibold pt-4">Truck Information</h3>
+                    <h3 className="text-1xl pb-3">Engine Information</h3>
+                    <div className="flex flex-row space-x-2">
+                        <CardOverview title='HorsePower' description={"Fuel efficiency in kilometers per litre"} value={"230 HP"} Icon={<FaTruck size={20} color="grey"/>} />
+                        <CardOverview title='Engine Capacity' description={"Size of the engine in litres"} value={"6.7 L"} />
+                        <CardOverview title='Engine Age' description={"Lifespan of the engine"} value={"5 Years"} />
+                        <CardOverview title='Mileage' description={"Fuel Effiency of the engine"} value={"4.5 KMPL"} />
+                        <CardOverview title='Emission Standard' description={"The truck complies with emission standards."} value={"BS VI"} />
+                    </div>
+                    {/* <h1 className=" border-b-2 pt-4"></h1> */}
+                    <div className="text-3xl font-bold pt-8 border-b-2">Charts</div>
+                    <Tabs className="space-y-4">
+                        <TabsContent className="space-y-4">
+                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-8">
+                                    <Card className="col-span-4">
+                                    <CardHeader>
+                                        <CardTitle>Mileage</CardTitle>
+                                        <CardDescription>
+                                        
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <Bargraph/>
+                                    </CardContent> 
+                                    </Card>
+                                    <Card className="col-span-4">
+                                    <CardHeader>
+                                        <CardTitle>Recent Shipments</CardTitle>
+                                        <CardDescription>
+                                        <Bargraph/>
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent>
+                                    </CardContent>
+                                    </Card>
+                                </div>
+                                
+                             </TabsContent>
+                             </Tabs>
                 </div>
                 <div className="pt-6">
                     <h3 className="text-2xl font-semibold">Vehicle Shipment</h3>

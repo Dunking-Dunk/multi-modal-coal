@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import AllVehiclesView from "../../components/map/allVehicles";
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";

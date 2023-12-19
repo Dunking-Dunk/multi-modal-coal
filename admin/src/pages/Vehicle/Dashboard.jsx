@@ -1,6 +1,13 @@
 import React from "react";
 import { useSelector } from 'react-redux'
-
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 import DataTable from "../../components/DataTable";
 import { VehicleColumn } from "../../lib/columns";
 import CardOverview from "../../components/OverviewCard";
@@ -60,6 +67,7 @@ datasets: [
                 </div>
     
             </div>
+
         )}else {
             return (
                 <div className="w-full h-full flex items-center justify-center">
@@ -67,6 +75,8 @@ datasets: [
                 </div>
             )
         }
+        </div>
+    )
 }
 
 export default Dashboard;
