@@ -30,7 +30,6 @@ const Train = () => {
         )
     }
 
-
     return (
         <div className="flex flex-col space-y-4 w-full h-full">
             <h1 className="text-4xl font-bold">Trains</h1>

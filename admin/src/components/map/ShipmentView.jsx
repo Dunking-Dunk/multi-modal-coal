@@ -22,7 +22,7 @@ const ShipmentView = ({ allPlaces }) => {
 
     return (
         <Map>
-            {map(allPlaces, (place) => {
+            {vehicles && map(allPlaces, (place) => {
                 return (
                     <React.Fragment key={place._id}>
                         <MarkerF position={{ lat: place.origin.location.coordinate[1], lng: place.origin.location.coordinate[0] }} />

@@ -23,8 +23,13 @@ const vehicleSchema = new mongoose.Schema({
         enum: ['truck', 'train', 'ship'],
         required: [true, 'Vehicle Mode Number Required'],
     },
+    active: {
+        type: Boolean,
+        default: false
+    },
     status: {
-        type: Boolean
+        type: Boolean,
+        default: true
     },
     shipments: [{
         type: mongoose.Schema.Types.ObjectId,

@@ -1,25 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import {
     Dimensions,
     StyleSheet,
     View,
     Text,
+    Image,
     Platform, TouchableOpacity
   } from "react-native";
-import MapView, {PROVIDER_GOOGLE, Marker, Callout} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import mapStyle, {darkMap} from '../utils/mapStyle'
 import { useSelector } from "react-redux";
+import TruckImg from '../assets/Truck.png'
 
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0122;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-const Map = ({places}) => {
+const Map = ({children}) => {
     const mapRef = useRef();
     const markerRef = useRef()
-    const userPosition = useSelector((state) => state.Main.location) 
+    const {userPosition, vehicle, shipments} = useSelector((state) => state.Main) 
 
     useEffect(() => {
       if (userPosition) {
@@ -41,8 +43,8 @@ const Map = ({places}) => {
 
    const onCenter = () => {
     mapRef.current.animateToRegion({
-      latitude: userPosition.latitude,
-      longitude: userPosition.longitude,
+      latitude: vehicle.location.coordinate[1],
+      longitude: vehicle.location.coordinate[0],
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     });
@@ -72,19 +74,19 @@ const Map = ({places}) => {
           </Marker.Animated>
             )}
 
-            {places && places.map((place, idx) => {
-              return (
-                <Marker coordinate={place.coordinate} key={idx}>
-                  <Callout>
-                    <Text>{place.placeName}</Text>
-                    <Text>{place.vicinity}</Text>
-                  </Callout>
-                </Marker>
-              )
-            })}
-   
+{vehicle && (
+                <Marker.Animated 
+            ref={markerRef}
+            coordinate={{latitude: vehicle.location.coordinate[1], longitude: vehicle.location.coordinate[0]}}
+            tracksViewChanges={false}
+          >
+            {/* <Image src={TruckImg}/> */}
+            <FontAwesome name="truck" size={22} color='#fff' />
+          </Marker.Animated>
+            )}  
+            {children}
             </MapView>
-            {userPosition && (
+            {vehicle && (
                 <TouchableOpacity
                 style={{
                   position: "absolute",

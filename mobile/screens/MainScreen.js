@@ -13,7 +13,7 @@ const Drawer = createDrawerNavigator()
 
 const MainScreen = () => {
   const { user } = useSelector((state) => state.Main)
- 
+
   if (user) {
     return(
       <View style={styles.container}>

@@ -12,7 +12,7 @@ import CardOverview from '../../components/OverviewCard'
 const Truck = () => {
     const { search } = useLocation()
     const manage = new URLSearchParams(search).get('manage')
-    const { trucks } = useSelector((state) => state.Vehicle)
+    const { trucks,stats } = useSelector((state) => state.Vehicle)
 
     if (manage) {
         return (
@@ -30,20 +30,6 @@ const Truck = () => {
 
     }
     return (
-        // <div className="flex flex-col space-y-4 w-full h-full">
-
-        //     <h1 className="text-4xl font-bold">Trucks</h1>
-        //     <div className="flex flex-row space-x-4">
-        //         <div className="w-5/6 h-[65vh]">
-        //             <AllVehiclesView type={'truck'} />
-        //         </div>
-        //         <div className="flex flex-col space-y-4 w-1/6">
-        //             <CardOverview title='Total' description='Total Number of Trucks' value={trucks.length} />
-        //             <CardOverview title='Active' description='Total Number of Active Trucks' value={trucks.length} />
-        //         </div>
-        //     </div>
-        // </div>
-
         <div className="flex flex-col space-y-4 w-full h-full">
   <h1 className="text-4xl font-bold">Trucks</h1>
   
@@ -61,7 +47,12 @@ const Truck = () => {
       <CardOverview 
         title='Active' 
         description='Total Number of Active Trucks' 
-        value={trucks.length} 
+        value={stats?.activeTruck} 
+      />
+            <CardOverview 
+        title='Idle' 
+        description='Total Number of Idle Trucks' 
+        value={trucks.length - stats?.activeTruck} 
       />
     </div>
   </div>

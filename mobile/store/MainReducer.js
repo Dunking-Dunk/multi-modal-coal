@@ -15,8 +15,8 @@ export const getVehicle = createAsyncThunk('main/getAllVehicle', async (body, th
 
 export const getPlaces = createAsyncThunk('main/getAllPlaces', async (body, thunkAPI) => {
     try {
-        const vehicles = await api.get(`/places/supervisor/${body}`)
-        const data = vehicles.data;
+        const places = await api.get(`/places/supervisor/${body}`)
+        const data = places.data;
         return data;
     } catch (err) {
         if (err) {
@@ -36,6 +36,19 @@ export const getAllDriverShipments = createAsyncThunk('main/getAllDriverShipment
         }
     }
 })
+
+export const getAllPlaceShipments = createAsyncThunk('main/getAllPlaceShipments', async (body, thunkAPI) => {
+    try {
+        const vehicles = await api.get(`/shipments/place/${body}`)
+        const data = vehicles.data;
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
+
 const authReducer = createSlice({
     name: 'main',
     initialState: {
@@ -79,6 +92,16 @@ const authReducer = createSlice({
             state.loading = false
         })
         builder.addCase(getAllDriverShipments.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(getAllPlaceShipments.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getAllPlaceShipments.fulfilled, (state, action) => {
+            state.shipments = action.payload.shipments
+            state.loading = false
+        })
+        builder.addCase(getAllPlaceShipments.rejected, (state, action) => {
             state.loading = false
         })
     }

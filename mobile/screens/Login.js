@@ -16,15 +16,16 @@ const LoginScreen = ({navigation}) => {
 
   const handleSubmit = async () => {
     try {
-      const res = await api.post('/users/login', state)
+        const res = await api.post('/users/login', state)
      
-      if (res.data.user.role === 'supervisor' || res.data.user.role === 'driver') {
-        await AsyncStorage.setItem('userToken', res.data.token)
-        dispatch(setUser(res.data.user))
-        navigation.navigate('main')
-      } else {
-        setError('only drivers and supervisor can login')
-      }
+        if (res.data.user.role === 'supervisor' || res.data.user.role === 'driver') {
+          await AsyncStorage.setItem('userToken', res.data.token)
+          dispatch(setUser(res.data.user))
+          navigation.navigate('main')
+        } else {
+          setError('only drivers and supervisor can login')
+        }
+    
     } catch (err) {
       console.log(err)
       }

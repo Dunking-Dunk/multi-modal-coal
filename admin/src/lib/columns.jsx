@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
+import moment from "moment";
 
 import store from '@/store/reducer/store'
 import { deleteVehicle } from "../store/reducer/VehicleReducer";
@@ -299,6 +300,44 @@ export const ShippingColumn = [
   },
 ];
 
+export const subShippingColumn = [
+  {
+    accessorKey: "origin.place.name",
+    header: "Origin",
+  },
+  {
+    accessorKey: "destination",
+    header: "Destination",
+    cell: ({ row }) => {
+      const place = row.getValue("destination");
+
+      return place.place?.name ? place.place?.name : place.customPlace.name
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Shipment Status",
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: ({ row }) => {
+      const id = row.getValue("_id");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          <Link
+            to={`/shipping/${id}`}
+            className="bg-secondary  h-full py-2 px-4 rounded-lg"
+          >
+            View Shipment
+          </Link>
+        </div>
+      );
+    },
+  },
+];
+
 export const shippingVehicleViewColumn = [
   {
     accessorKey: "_id",
@@ -359,12 +398,30 @@ export const vehicleShippingColumn = [
     header: "Shipment Status",
   },
   {
-    accessorKey: "dispatch",
-    header: "shipment dispatched",
+    accessorKey: "startDate",
+    header: "dispatch",
+    cell: ({ row }) => {
+      const startDate = row.getValue("startDate");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          {moment(startDate).format("MMMM Do YYYY, h:mm")}
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "arrived",
-    header: "shipment Reached",
+    accessorKey: "eta",
+    header: "Arrived",
+     cell: ({ row }) => {
+      const eta = row.getValue("eta");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          {moment(eta).format("MMMM Do YYYY, h:mm")}
+        </div>
+      );
+    },
   },
 
   {
@@ -405,21 +462,30 @@ export const placeShippingColumn = [
     header: "Shipment Status",
   },
   {
-    accessorKey: "dispatch",
-    header: "shipment dispatched",
-  },
-  {
-    accessorKey: "arrived",
-    header: "shipment Reached",
-  },
-
-  {
     accessorKey: "startDate",
-    header: "started",
+    header: "dispatch",
+    cell: ({ row }) => {
+      const startDate = row.getValue("startDate");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          {moment(startDate).format("MMMM Do YYYY, h:mm")}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "eta",
-    header: "Estimated time of arrival",
+    header: "Arrived",
+     cell: ({ row }) => {
+      const eta = row.getValue("eta");
+
+      return (
+        <div className="flex space-x-4 items-center">
+          {moment(eta).format("MMMM Do YYYY, h:mm")}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "action",
@@ -461,5 +527,4 @@ export const ShippingColDash = [
     accessorKey: "status",
     header: "Shipment Status",
   },
-
 ];

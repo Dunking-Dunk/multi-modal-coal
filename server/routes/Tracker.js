@@ -13,7 +13,8 @@ router.post('/', async (req, res) => {
         location: {
             coordinate: tracker.location.coordinate
         },
-        speed: tracker.speed
+        speed: tracker.speed,
+        active: tracker.engineStatus
     })
     res.sendStatus(200)
 })
