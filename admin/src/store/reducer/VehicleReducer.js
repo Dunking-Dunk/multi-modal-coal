@@ -74,6 +74,17 @@ export const getVehicleShipment =  createAsyncThunk('vehicle/getVehicleShipment'
     }
 })
 
+export const getVehiclesStats = createAsyncThunk('vehicle/getVehiclesStats', async (body, thunkAPI) => {
+    try {
+        const stats = await api.get(`/vehicles/stats`)
+        const data = stats.data
+        return data;
+    } catch (err) {
+        if (err) {
+            return thunkAPI.rejectWithValue({error: err.response.data})
+        }
+    }
+})
 
 const VehicleReducer = createSlice({
     name: 'vehicle',
@@ -83,7 +94,8 @@ const VehicleReducer = createSlice({
         trains: [], 
         ships: [],
         vehicle: null,
-        loading: false
+        loading: false,
+        stats: null
     },
     reducers: {
         setTracker: (state,action) => {
@@ -158,6 +170,16 @@ const VehicleReducer = createSlice({
             state.loading = false
         })
         builder.addCase(updateVehicle.rejected, (state, action) => {
+            state.loading = false
+        })
+        builder.addCase(getVehiclesStats.pending, (state, action) => {
+            state.loading = true
+        })
+        builder.addCase(getVehiclesStats.fulfilled, (state, action) => {
+            state.stats = action.payload
+            state.loading = false
+        })
+        builder.addCase(getVehiclesStats.rejected, (state, action) => {
             state.loading = false
         })
     }

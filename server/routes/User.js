@@ -80,7 +80,7 @@ router.post('/create', authenticatedUser, async (req, res, next) => {
 
   router.post("/login", async (req, res, next) => {
     const { password, email } = req.body;
-    console.log(req.body)
+   
     if (!password || !email)
       return next(new Error("Please enter email and password", 400));
   
@@ -189,6 +189,8 @@ router.delete('/:id', authenticatedUser, async (req, res) => {
         $unset: {supervisor: ''}
       })
   }
+
+  await User.findByIdAndDelete(id)
 
   res.status(201).json({
     success: true,

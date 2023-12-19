@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route } from 'react-router-dom'
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Dashboard from "./Dashboard";
 import Truck from "./Truck";
@@ -11,11 +11,15 @@ import CreateVehicle from "./CreateVehicle";
 import UpdateVehicle from './UpdateVehicle'
 import ViewVehicle from "./View";
 import socket from "../../api/socket";
-
-
+import { getVehiclesStats } from "../../store/reducer/VehicleReducer";
 
 const Vehicle = () => {
     const { vehicles } = useSelector((state) => state.Vehicle)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getVehiclesStats())
+    }, [])
 
     useEffect(() => {
         if (vehicles) {

@@ -70,7 +70,7 @@ const UserForm = ({ update }) => {
                 email: '',
                 password: 'lastgood',
                 contact: '',
-                role: '',
+                role: 'driver',
                 age: 0
             }
         }
@@ -243,7 +243,7 @@ const UserForm = ({ update }) => {
                         </FormItem>
                     )}
                 />
-                {loading ? <Loader /> : <Button type="submit" className='w-3/6'>Create</Button>}
+                {loading ? <Loader /> : <Button type="submit" className='w-3/6'>{update ? 'Update': 'Create'}</Button>}
 
             </form>
         </Form>

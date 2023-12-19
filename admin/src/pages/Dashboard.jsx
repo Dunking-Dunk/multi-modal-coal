@@ -12,18 +12,14 @@ import HeatMap from "../components/Visual/HeatMap";
 import Table from '../components/DataTable'
 import { ShippingColumn,ShippingColDash } from "../lib/columns";
 import { useSelector, useDispatch } from "react-redux";
-import { Linegraph } from "../components/Visual/Linegraph";
 import { Bargraph } from "../components/Visual/Bargraph";
 import { getAllSubShipments } from "../store/reducer/ShipmentReducer";
 import AllShipmentsMap from '../components/map/AllShipments';
-import AllVehicleView from "../components/map/allVehicles";
-
-
 
 const Dashboard = () => {
   const { shipments, subShipments } = useSelector((state) => state.Shipment)
   const dispatch = useDispatch()
-  const { vehicles, trains } = useSelector((state) => state.Vehicle)
+  const { vehicles } = useSelector((state) => state.Vehicle)
 
   useEffect(() => {
       dispatch(getAllSubShipments())
@@ -92,7 +88,7 @@ const Dashboard = () => {
                 <CardTitle className="text-sm font-medium">Total Active Vehicles</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{vehicles.length}</div>
+                <div className="text-2xl font-bold">{vehicles?.length}</div>
                 <p className="text-xs text-muted-foreground">
                   Road, Rail, Inland & Coastal
                 </p>
@@ -117,7 +113,7 @@ const Dashboard = () => {
                 </svg>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">4460</div>
+                <p className="text-2xl font-bold">4460</p>
                 <p className="text-xs text-muted-foreground">
                 in Tons
                 </p>

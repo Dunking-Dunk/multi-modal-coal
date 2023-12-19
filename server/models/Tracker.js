@@ -21,19 +21,35 @@ const trackerSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    engineStatus: {
+        type: Boolean,
+        default: false  
+    },
     engineRpm: {
         type: Number,
         default: 0
     },
-    fuelEfficieny: {
+    engineTemp: {
         type: Number,
         default: 0
     },
-    exhaustGasTemp: {
+    torque: {
         type: Number,
         default: 0
     },
-    oxygenLevel: {
+    batteryLevel: {
+        type: Number,
+        default: 0
+    },
+    batteryVoltage: {
+        type: Number,
+        default: 0,
+    },
+    wheelRpm: {
+        type: Number,
+        default: 0
+    },
+    co2emission: {
         type: Number,
         default: 0
     },
@@ -41,6 +57,13 @@ const trackerSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    transmissionTemp: {
+        type: Number,
+        default: 0
+    },
+    diagnosticCodes: [{
+        type:String   
+    }],
     trackerId: {
         type: String,
         required: true,
@@ -48,7 +71,7 @@ const trackerSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
-    },
+    }
 })
 
 const Tracker = mongoose.model('Tracker', trackerSchema)

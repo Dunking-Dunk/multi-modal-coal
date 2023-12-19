@@ -12,8 +12,8 @@ function HeatMap() {
 
 
 const PROJECTION_CONFIG = {
-  scale: 350,
-  center: [78.9629, 22.5937] // always in [East Latitude, North Longitude]
+  scale: 1400,
+  center: [78.9629, 22.5937], // always in [East Latitude, North Longitude]
 };
 
 // Red Variants
@@ -46,7 +46,9 @@ const geographyStyle = {
   },
   pressed: {
     outline: 'none'
-  }
+  },
+  width: '100%',
+  height: '100%'
 };
 
 // will generate random heatmap data on every call
@@ -122,17 +124,16 @@ const getHeatMapData = () => {
   };
 
   return (
-    <div className="full-width-height container">
+    <div className=" h-full w-full container">
       {/* <h1 className="no-margin center">States and UTs</h1> */}
       <ReactTooltip>{tooltipContent}</ReactTooltip>
         <ComposableMap
+        className='w-full h-full'
           projectionConfig={PROJECTION_CONFIG}
           projection="geoMercator"
-          // width={max}
-          // height={"400px"}
           data-tip=""
         >
-          <Geographies geography={INDIA_TOPO_JSON}>
+          <Geographies geography={INDIA_TOPO_JSON} className='w-full h-full'>
             {({ geographies }) =>
               geographies.map(geo => {
                 //console.log(geo.id);

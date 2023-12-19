@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import socket from "../../api/socket";
 
 const Index = () => {
-
     useEffect(() => {
         socket.getAllVehiclesLocations("allVehicles")
 

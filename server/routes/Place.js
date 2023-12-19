@@ -88,7 +88,7 @@ router.delete('/:id',authenticatedUser, async (req, res) => {
 })
 
 router.get('/supervisor/:id', authenticatedUser, async (req, res, next) => {
-    const place = await Place.find({ supervisor: req.params.id })
+    const place = await Place.findOne({ supervisor: req.params.id })
     
     if (!place)
         return next(new ErrorThrower('No Place found'))

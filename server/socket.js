@@ -42,6 +42,15 @@ async function checkVehiclePlaceIntersection(subShipments, vehicle) {
                         quantity: 2000
                     })
                     await mainShipment.save()
+                    await Logs.create({
+                        message: `Shipment is completed`,
+                        reference: [
+                            {
+                                id: shipment.shipment,
+                                ref: 'shipping'
+                            },
+                        ]
+                    })
                 }
             }   
         }

@@ -77,7 +77,6 @@ const ViewPlace = () => {
                             </Card>
                         )}
                     </div>
-
                 </div>
                 <div className="space-y-4">
                     <h3 className="text-3xl font-semibold">Shipments</h3>
@@ -87,6 +86,12 @@ const ViewPlace = () => {
                             <Table columns={placeShippingColumn} data={place.shipments} />
                         </div>
                     ) : <p>No Shipment is assigned to this place</p>}
+                </div>
+                <div>
+                <h3 className="text-3xl font-semibold">Live Survillence of the Critical point</h3>
+                <div className="w-full h-full overflow-hidden mt-4">
+                <iframe className="w-full h-[500px]" src="http://proxy61.rt3.io:38823/camera" title="camera monitoring"></iframe>
+                </div>
                 </div>
             </div>
         )
