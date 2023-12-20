@@ -1,0 +1,22 @@
+{
+    "greet": "आपका स्वागत है,",
+    "supervisor": "निरीक्षक: ",
+    "CurrentShipment": "वर्तमान लदान",
+    "To": "को",
+    "AssignShip": "नियत लदान",
+    "Shipment": "लदान",
+    "Status": "स्थिति",
+    "ShipDeet": "लदान विवरण",
+    "Capacity": "क्षमता",
+    "Tons": "टन",
+    "Origin": "मूल",
+    "Destination": "गंतव्य",
+    "ETA": "अनुमानित आगमन समय",
+    "changeLanguage": "भाषा बदलें",
+    "Settings": "सेटिंग्स",
+    "Name": "नाम",
+    "Role": "भूमिका",
+    "Email": "ईमेल",
+    "Contact": "संपर्क"
+  }
+  
