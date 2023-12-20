@@ -1,0 +1,22 @@
+{
+    "greet": "Welcome Back,",
+    "supervisor": "In Charge of: ",
+    "CurrentShipment": "Current Shipment",
+    "To": "To",
+    "AssignShip": "Assigned Shipments",
+    "Shipment": "Shipment",
+    "Status" : "Status",
+    "ShipDeet" : "Shipment Details",
+    "Capacity": "Capacity",
+    "Tons": "Tons",
+    "Origin" : "Origin",
+    "Destination" : "Destination",
+    "ETA" : "ETA",
+    "changeLanguage": "Change Language",
+    "Settings" : "Settings",
+    "Name":"Name", 
+    "Role":"Role",
+    "Email":"Email",
+    "Contact":"Contact"
+
+  }
